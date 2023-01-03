@@ -95,6 +95,8 @@ func (controllers *AuthControllerImpl) Logout(ctx *fiber.Ctx) error {
 
 	controllers.UserServices.DestroySessionUser(cntx, authToken)
 
+	controllers.CookieConfig.DeleteCookie(ctx)
+
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",

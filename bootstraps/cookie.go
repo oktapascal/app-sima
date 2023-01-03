@@ -30,7 +30,9 @@ func (cookie *CookieImpl) CreateTokenAndCookie(data string, expiration time.Time
 }
 
 func (cookie *CookieImpl) DeleteCookie(ctx *fiber.Ctx) {
-	ctx.ClearCookie(cookie.GetCookieToken())
+	cookies := cookie.setTokenCookie(cookie.GetCookieToken(), "deleted", time.Now().Add(-3*time.Second))
+
+	ctx.Cookie(cookies)
 }
 
 func (cookie *CookieImpl) setTokenCookie(name string, data string, expiration time.Time) *fiber.Cookie {

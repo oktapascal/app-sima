@@ -8,6 +8,7 @@ import (
 	"github.com/oktapascal/app-barayya/controllers"
 	"github.com/oktapascal/app-barayya/database"
 	"github.com/oktapascal/app-barayya/exceptions"
+	"github.com/oktapascal/app-barayya/middleware"
 	"github.com/oktapascal/app-barayya/repository"
 	"github.com/oktapascal/app-barayya/routes"
 	"github.com/oktapascal/app-barayya/services"
@@ -40,12 +41,14 @@ func main() {
 
 	app.Use(recover.New())
 
+	middlewareAuth := middleware.NewAuthenticationImpl(cookiesConfig, jwtConfig)
+
 	userRepository := repository.NewUserRepositoryImpl()
 	userServices := services.NewUserServicesImpl(userRepository, mySql)
 
 	authControllers := controllers.NewAuthControllerImpl(validate, userServices, jwtConfig, cookiesConfig)
 
-	routes.NewRouter(app, authControllers)
+	routes.NewRouter(app, middlewareAuth, authControllers)
 
 	// load static files
 	app.Static("/", "./ui/dist")

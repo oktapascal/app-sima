@@ -11,7 +11,7 @@ type Jwt interface {
 	GenerateAccessToken(user web.UserResponses) (string, time.Time, error)
 }
 
-type JwtClaims struct {
+type jwtClaims struct {
 	IdUser     uint   `json:"id_user"`
 	KodeLokasi string `json:"kode_lokasi"`
 	Role       string `json:"role"`
@@ -37,7 +37,7 @@ func (config *JwtImpl) GenerateAccessToken(user web.UserResponses) (string, time
 }
 
 func (config *JwtImpl) generateToken(user web.UserResponses, expiration time.Time, secret []byte) (string, time.Time, error) {
-	claims := &JwtClaims{
+	claims := &jwtClaims{
 		IdUser:     user.Id,
 		KodeLokasi: user.KodeLokasi,
 		Role:       user.Role,
