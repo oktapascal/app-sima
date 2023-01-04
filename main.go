@@ -52,6 +52,9 @@ func main() {
 
 	// load static files
 	app.Static("/", "./ui/dist")
+	app.Get("/*", func(ctx *fiber.Ctx) error {
+		return ctx.SendFile("./ui/dist/index.html")
+	})
 
 	server := app.Listen(":8080")
 	utils.PanicIfError(server)

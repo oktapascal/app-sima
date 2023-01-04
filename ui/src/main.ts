@@ -1,14 +1,23 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import {createApp} from "vue";
+import {createPinia} from "pinia";
+import {ErrorMessage, Field, Form, configure} from "vee-validate";
 
-import App from './App.vue'
-import router from './router'
+import App from "./App.vue";
+import router from "./router";
 
-import './assets/main.css'
+import "flowbite";
+import "./assets/main.css";
 
-const app = createApp(App)
+configure({
+    validateOnBlur: true,
+    validateOnChange: true,
+    validateOnInput: false,
+});
 
-app.use(createPinia())
-app.use(router)
+const app = createApp(App);
+app.component("VForm", Form).component("VField", Field).component("VErrorMessage", ErrorMessage);
 
-app.mount('#app')
+app.use(createPinia());
+app.use(router);
+
+app.mount("#app");
