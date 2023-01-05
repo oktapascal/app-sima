@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {withDefaults, defineProps, defineEmits} from "vue";
+import {withDefaults} from "vue";
 interface Props {
   disabled?: boolean
   fullWidth?: boolean

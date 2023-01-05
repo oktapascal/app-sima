@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import {onBeforeUnmount, onMounted} from "vue";
 import {useBreakPointStore} from "@/stores/breakpoint";
+import {useAlertStore} from "@/stores/alert";
 import NavbarBase from "@/components/NavbarBase.vue";
 import NavbarGuest from "@/components/NavbarGuest.vue";
+import AlertDefault from "@/components/alert/AlertDefault.vue";
 
 const breakPointStore = useBreakPointStore();
+const alertStore = useAlertStore()
 
 function onResize() {
   const width = window.screen.width;
@@ -27,6 +30,14 @@ onMounted(() => {
     }
   }
 
+  const width = window.screen.width;
+
+  if (320 <= width && 768 >= width) {
+    breakPointStore.updateCheckMobile(true);
+  } else {
+    breakPointStore.updateCheckMobile(false);
+  }
+
   window.addEventListener("resize", onResize);
 });
 
@@ -42,4 +53,9 @@ onBeforeUnmount(() => {
   <main>
     <RouterView/>
   </main>
+  <Teleport to="body">
+    <Transition enter-active-class="animate__animated animate__fadeInRight" leave-active-class="animate__animated animate__fadeOutRight">
+      <AlertDefault v-if="alertStore.getAlert.show"/>
+    </Transition>
+  </Teleport>
 </template>

@@ -1,7 +1,12 @@
 import axios from "axios"
 import routes from "@/router"
 
-const instance = axios.create()
+const BASE_URL = "http://localhost:8080/api"
+
+const instance = axios.create({
+    withCredentials: true,
+    baseURL: BASE_URL
+})
 
 instance.interceptors.request.use(function (config) {
     config.withCredentials = true

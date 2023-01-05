@@ -1,19 +1,19 @@
-import { defineStore } from "pinia"
+import {defineStore} from "pinia";
 
 export const useBreakPointStore = defineStore("breakpoint", {
     state: function () {
         return {
-            isMobile: false
-        }
+            isMobile: false,
+        };
     },
     getters: {
         checkIsMobile: function (state) {
-            return state.isMobile
-        }
+            return state.isMobile;
+        },
     },
     actions: {
         updateCheckMobile(value: boolean) {
             this.isMobile = value;
         },
-    }
-})
+    },
+});
