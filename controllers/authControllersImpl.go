@@ -77,12 +77,14 @@ func (controllers *AuthControllerImpl) Login(ctx *fiber.Ctx) error {
 
 	controllers.UserServices.SaveSessionUser(cntx, session)
 
+	userSession := controllers.UserServices.GetSessionUser(cntx, token)
+
 	controllers.CookieConfig.CreateTokenAndCookie(token, expiration, ctx)
 
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
-		Data:          nil,
+		Data:          userSession,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(responses)
@@ -101,6 +103,22 @@ func (controllers *AuthControllerImpl) Logout(ctx *fiber.Ctx) error {
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
 		Data:          nil,
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(responses)
+}
+
+func (controllers *AuthControllerImpl) GetUserAccess(ctx *fiber.Ctx) error {
+	cntx := ctx.UserContext()
+
+	authToken := ctx.Cookies(controllers.CookieConfig.GetCookieToken())
+
+	user := controllers.UserServices.GetSessionUser(cntx, authToken)
+
+	responses := web.JsonResponses{
+		StatusCode:    fiber.StatusOK,
+		StatusMessage: "OK",
+		Data:          user,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(responses)
