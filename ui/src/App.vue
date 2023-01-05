@@ -19,7 +19,7 @@ function onResize() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (localStorage.getItem("theme") == null) {
     document.documentElement.classList.remove("dark");
   } else {
