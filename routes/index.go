@@ -13,7 +13,7 @@ func NewRouter(app *fiber.App, middlewareAuth middleware.Authentication, authCon
 
 	NewAuthRoutes(authGroup, authControllers)
 
-	sessionApi := authGroup.Group("/", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
+	sessionApi := authGroup.Group("/session", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
 	sessionApi.Get("/user-access", authControllers.GetUserAccess)
 
 	profileGroup := app.Group("/api/profile", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)

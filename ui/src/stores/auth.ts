@@ -47,7 +47,7 @@ export const useAuthStore = defineStore("auth", {
             const alertStore = useAlertStore()
             const self = this
             try {
-                const response: AxiosResponse<AuthResponse> = await axios.get("/api/auth/user-access", {
+                const response: AxiosResponse<AuthResponse> = await axios.get("/api/auth/session/user-access", {
                     withCredentials: true
                 })
 

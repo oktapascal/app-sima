@@ -60,7 +60,7 @@ function togglePassword() {
 async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>) {
   loading.value = true
   try {
-    const response: AxiosResponse<AuthResponse> = await instance.post("/auth/login", values)
+    const response: AxiosResponse<AuthResponse> = await instance.post("/auth/log", values)
 
     const data: IAuth = {
       id_user: response.data.data.id_user,
@@ -80,37 +80,17 @@ async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>
 
         actions.setFieldError(field, message)
       }
-
-      if (error.response?.status === 404) {
-        const alert: IAlert = {
-          show: true,
-          type: "error",
-          text: error.response.data?.statusMessage
-        }
-
-        alertStore.showAlert(alert)
-      }
-
-      if (error.response?.status === 500) {
-        const alert: IAlert = {
-          show: true,
-          type: "error",
-          text: "Terjadi kesalahan pada server"
-        }
-
-        alertStore.showAlert(alert)
-      }
     } else {
       const alert: IAlert = {
         show: true,
         type: "error",
-        text: "Terjadi kesalahan pada server"
+        text: "Terjadi kesalahan tidak diketahui"
       }
 
       alertStore.showAlert(alert)
     }
   } finally {
-    loading.value = true
+    loading.value = false
   }
 }
 </script>
