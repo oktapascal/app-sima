@@ -2,12 +2,15 @@
 import {onBeforeUnmount, onMounted} from "vue";
 import {useBreakPointStore} from "@/stores/breakpoint";
 import {useAlertStore} from "@/stores/alert";
+import {useAuthStore} from "@/stores/auth";
 import NavbarBase from "@/components/NavbarBase.vue";
 import NavbarGuest from "@/components/NavbarGuest.vue";
+import NavbarProtected from "@/components/NavbarProtected.vue";
 import AlertDefault from "@/components/alert/AlertDefault.vue";
 
 const breakPointStore = useBreakPointStore();
 const alertStore = useAlertStore()
+const authStore = useAuthStore()
 
 function onResize() {
   const width = window.screen.width;
@@ -48,7 +51,8 @@ onBeforeUnmount(() => {
 
 <template>
   <NavbarBase>
-    <NavbarGuest/>
+    <NavbarProtected v-if="authStore.getStatusAuthenticated" />
+    <NavbarGuest v-else />
   </NavbarBase>
   <main>
     <RouterView/>

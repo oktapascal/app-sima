@@ -7,7 +7,7 @@ export const useBreakPointStore = defineStore("breakpoint", {
         };
     },
     getters: {
-        checkIsMobile: function (state) {
+        checkIsMobile: function (state): boolean {
             return state.isMobile;
         },
     },
