@@ -1,6 +1,32 @@
 <script lang="ts" setup>
+import {useRouter} from "vue-router";
 import Notification from "@/components/Notification.vue";
 import IconLogout from "@/components/icon/IconLogout.vue";
+import instance from "@/api/instance";
+import {type IAlert, useAlertStore} from "@/stores/alert";
+import {useAuthStore} from "@/stores/auth";
+
+const authStore = useAuthStore()
+const alertStore = useAlertStore()
+
+const router = useRouter()
+
+async function onSignOut() {
+  try {
+    await instance.post("/auth/logout")
+
+    authStore.$reset()
+    await router.push({ path: "/login" })
+  } catch (error: unknown) {
+    const alert: IAlert = {
+      show: true,
+      type: "error",
+      text: "Terjadi kesalahan tidak diketahui"
+    }
+
+    alertStore.showAlert(alert)
+  }
+}
 </script>
 
 <template>
@@ -9,7 +35,7 @@ import IconLogout from "@/components/icon/IconLogout.vue";
       <Notification/>
     </div>
     <div class="flex-none">
-      <button data-tooltip-target="tooltip-bottom-2" data-tooltip-placement="bottom" class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200">
+      <button data-tooltip-target="tooltip-bottom-2" data-tooltip-placement="bottom" class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200" @click="onSignOut">
         <IconLogout className="h-7 w-7 fill-current text-gray-500 dark:text-white"/>
       </button>
       <div id="tooltip-bottom-2" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium bg-gray-300 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700 dark:text-white">

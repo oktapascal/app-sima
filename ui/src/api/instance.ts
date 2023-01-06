@@ -2,7 +2,7 @@ import axios from "axios"
 import routes from "@/router"
 import {useAlertStore, type IAlert} from "@/stores/alert";
 
-const BASE_URL = "http://localhost:8080/api"
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 const instance = axios.create({
     withCredentials: true,
@@ -22,10 +22,15 @@ instance.interceptors.response.use(function (response) {
 }, async function (error) {
     const alertStore = useAlertStore()
     if(error.response.status === 401) {
+        let redirectUrl = ""
+        if(routes.currentRoute.value.path !== "/login") {
+            redirectUrl = routes.currentRoute.value.path
+        }
+
         await routes.push({
             path: "/login",
             query: {
-                redirect: routes.currentRoute.value.path
+                redirect: redirectUrl
             }
         })
     }

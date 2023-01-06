@@ -60,7 +60,7 @@ function togglePassword() {
 async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>) {
   loading.value = true
   try {
-    const response: AxiosResponse<AuthResponse> = await instance.post("/auth/log", values)
+    const response: AxiosResponse<AuthResponse> = await instance.post("/auth/login", values)
 
     const data: IAuth = {
       id_user: response.data.data.id_user,
