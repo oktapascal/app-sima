@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Notification from "@/components/Notification.vue";
-import ProfileMobile from "@/components/ProfileMobile.vue";
+import ProfileMobile from "@/components/mobile/MobileProfile.vue";
 
 </script>
 

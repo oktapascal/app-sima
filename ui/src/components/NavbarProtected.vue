@@ -3,8 +3,8 @@ import {ref} from "vue";
 import {useBreakPointStore} from "@/stores/breakpoint";
 import IconMenu from "@/components/icon/IconMenu.vue";
 import IconMenuOpen from "@/components/icon/IconMenuOpen.vue";
-import NavbarMobile from "@/components/NavbarMobile.vue";
-import NavbarWeb from "@/components/NavbarWeb.vue";
+import NavbarMobile from "@/components/mobile/MobileNavbar.vue";
+import NavbarWeb from "@/components/web/WebNavbar.vue";
 
 const breakPointStore = useBreakPointStore()
 
