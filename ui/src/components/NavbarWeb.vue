@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {useRouter} from "vue-router";
 import Notification from "@/components/Notification.vue";
+import ConfigApp from "@/components/config/ConfigApp.vue";
 import IconLogout from "@/components/icon/IconLogout.vue";
 import instance from "@/api/instance";
 import {type IAlert, useAlertStore} from "@/stores/alert";
@@ -32,7 +33,10 @@ async function onSignOut() {
 <template>
   <div class="flex flex-row flex-nowrap mr-2">
     <div class="flex-1">
-      <Notification/>
+      <Notification />
+    </div>
+    <div class="flex-1">
+      <ConfigApp />
     </div>
     <div class="flex-none">
       <button data-tooltip-target="tooltip-bottom-2" data-tooltip-placement="bottom" class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200" @click="onSignOut">

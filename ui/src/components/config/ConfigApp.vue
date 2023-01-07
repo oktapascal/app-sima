@@ -26,9 +26,13 @@ watch(checked, () => {
 
 <template>
   <div>
-    <button class="p-2.5 border border-blue-700 bg-blue-700 fixed top-2/4 right-0 truncate -mt-6 text-center z-50 rounded-l-lg rounded-r-none border-0 hover:bg-blue-700 dark:bg-gray-700 dark:hover:bg-gray-700" @click="onToggle(true)">
-      <IconCog className="h-7 w-7 text-white dark:text-white" />
+    <button data-tooltip-target="tooltip-bottom-3" data-tooltip-placement="bottom" class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200" @click="onToggle(true)">
+      <IconCog className="h-7 w-7 fill-current text-gray-500 dark:text-white" />
     </button>
+    <div id="tooltip-bottom-3" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium bg-gray-300 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700 dark:text-white">
+      Config App
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
     <Transition enter-active-class="animate__animated animate__slideInRight"
                 leave-active-class="animate__animated animate__slideOutRight">
       <ConfigBox v-if="openConfig" @onToggle="onToggle">

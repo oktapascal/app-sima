@@ -7,7 +7,6 @@ import NavbarBase from "@/components/NavbarBase.vue";
 import NavbarGuest from "@/components/NavbarGuest.vue";
 import NavbarProtected from "@/components/NavbarProtected.vue";
 import AlertDefault from "@/components/alert/AlertDefault.vue";
-import ConfigApp from "@/components/config/ConfigApp.vue";
 
 const breakPointStore = useBreakPointStore();
 const alertStore = useAlertStore()
@@ -55,7 +54,6 @@ onBeforeUnmount(() => {
     <NavbarProtected v-if="authStore.getStatusAuthenticated" />
     <NavbarGuest v-else />
   </NavbarBase>
-  <ConfigApp v-if="authStore.getStatusAuthenticated" />
   <main>
     <RouterView/>
   </main>
