@@ -7,6 +7,7 @@ import (
 	"github.com/oktapascal/app-barayya/models/domain"
 	"github.com/oktapascal/app-barayya/utils"
 	"gorm.io/gorm"
+	"strconv"
 	"time"
 )
 
@@ -128,5 +129,28 @@ func (repository *UserRepositoryImpl) GetUserBySession(ctx context.Context, db *
 	}
 
 	// Return the user variable and a nil error.
+	return user, nil
+}
+
+// GetUserProfile retrieves a user's profile information from the database using the given IdUser.
+// It returns a domain.User value and an error.
+func (repository *UserRepositoryImpl) GetUserProfile(ctx context.Context, db *gorm.DB, IdUser uint) (domain.User, error) {
+	var user domain.User
+
+	row := db.Table("user as a").Select("a.id, a.username, a.role, b.kode_lokasi, b.foto, b.email, b.no_telp, b.alamat, b.nama, b.nik").
+		InnerJoins("inner join karyawan as b on a.id=b.id_user").
+		Where("a.id = ?", strconv.FormatUint(uint64(IdUser), 10)).Row()
+
+	if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
+		return user, errors.New("user not found")
+	}
+
+	err := row.Scan(&user.Id, &user.Username, &user.Role, &user.Karyawan.KodeLokasi, &user.Karyawan.Foto, &user.Karyawan.Email,
+		&user.Karyawan.NoTelp, &user.Karyawan.Alamat, &user.Karyawan.Nama, &user.Karyawan.Nik)
+
+	if err != nil {
+		utils.PanicIfError(err)
+	}
+
 	return user, nil
 }

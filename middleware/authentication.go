@@ -14,14 +14,6 @@ type Authentication interface {
 	MiddlewareBearer(ctx *fiber.Ctx) error
 }
 
-// jwtClaims represents the claims that are stored in a JSON web token (JWT).
-type jwtClaims struct {
-	IdUser     uint   `json:"id_user"`
-	KodeLokasi string `json:"kode_lokasi"`
-	Role       string `json:"role"`
-	jwt.RegisteredClaims
-}
-
 // AuthenticationImpl is a struct that implements the Authentication interface
 // and has fields for handling cookies and JWTs.
 type AuthenticationImpl struct {
@@ -76,7 +68,7 @@ func (middleware *AuthenticationImpl) MiddlewareBearer(ctx *fiber.Ctx) error {
 	}
 
 	verify := middleware.Jwt.GetJwtKey()
-	claims := &jwtClaims{}
+	claims := &web.JwtClaims{}
 
 	// Verify the JWT using the jwt package
 	withClaims, err := jwt.ParseWithClaims(authorization, claims, func(token *jwt.Token) (interface{}, error) {
@@ -114,7 +106,7 @@ func (middleware *AuthenticationImpl) MiddlewareBearer(ctx *fiber.Ctx) error {
 	}
 
 	// If the request is authorized, store the JWT claims in the context object and pass control to the next handler
-	claims = withClaims.Claims.(*jwtClaims)
+	claims = withClaims.Claims.(*web.JwtClaims)
 	ctx.Locals("user", claims)
 
 	return ctx.Next()

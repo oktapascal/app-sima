@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-func NewRouter(app *fiber.App, middlewareAuth middleware.Authentication, authControllers controllers.AuthControllers) {
+func NewRouter(app *fiber.App,
+	middlewareAuth middleware.Authentication,
+	authControllers controllers.AuthControllers,
+	profileControllers controllers.ProfileControllers) {
 	authGroup := app.Group("/api/auth")
 
 	NewAuthRoutes(authGroup, authControllers)
@@ -18,7 +21,7 @@ func NewRouter(app *fiber.App, middlewareAuth middleware.Authentication, authCon
 
 	profileGroup := app.Group("/api/profile", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
 
-	NewProfileRoutes(profileGroup)
+	NewProfileRoutes(profileGroup, profileControllers)
 
 	app.Use(func(ctx *fiber.Ctx) error {
 		if strings.HasPrefix(ctx.OriginalURL(), "/api") {

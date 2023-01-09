@@ -14,14 +14,6 @@ type Jwt interface {
 	GenerateAccessToken(user web.UserResponses) (string, time.Time, error)
 }
 
-// jwtClaims represents the claims contained in a JWT.
-type jwtClaims struct {
-	IdUser     uint   `json:"id_user"`
-	KodeLokasi string `json:"kode_lokasi"`
-	Role       string `json:"role"`
-	jwt.RegisteredClaims
-}
-
 // JwtImpl is a concrete implementation of the Jwt interface.
 type JwtImpl struct {
 	// Config is a Config interface used to get the secret key for signing JWTs.
@@ -51,7 +43,7 @@ func (config *JwtImpl) GenerateAccessToken(user web.UserResponses) (string, time
 // generateToken creates a new JWT with the given user's information, expiration date, and secret key.
 func (config *JwtImpl) generateToken(user web.UserResponses, expiration time.Time, secret []byte) (string, time.Time, error) {
 	// Set the claims for the JWT using the given user's information.
-	claims := &jwtClaims{
+	claims := &web.JwtClaims{
 		IdUser:     user.Id,
 		KodeLokasi: user.KodeLokasi,
 		Role:       user.Role,

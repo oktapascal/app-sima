@@ -25,9 +25,9 @@ func NewUserServicesImpl(userRepository repository.UserRepository, db *gorm.DB) 
 
 // Save is a method on the *UserServicesImpl struct that saves a new user to the database.
 // It takes in a context of type context.Context and a request of type web.RegisterRequest as input parameters.
-func (services *UserServicesImpl) Save(context context.Context, request web.RegisterRequest) {
+func (services *UserServicesImpl) Save(ctx context.Context, request web.RegisterRequest) {
 	// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	tx := services.Db.WithContext(context).Begin()
+	tx := services.Db.WithContext(ctx).Begin()
 	// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
 	defer utils.CommitRollback(tx)
 
@@ -49,22 +49,22 @@ func (services *UserServicesImpl) Save(context context.Context, request web.Regi
 	}
 
 	// Call the Store method on the UserRepository field of the *UserServicesImpl struct, passing in the context, tx, and user variables as arguments.
-	services.UserRepository.Store(context, tx, user)
+	services.UserRepository.Store(ctx, tx, user)
 }
 
 // CheckUsername is a method on the *UserServicesImpl struct that checks if a given username is already in use.
 // It takes in a context of type context.Context and a username of type string as input parameters.
 // It returns a web.UserResponses.
-func (services *UserServicesImpl) CheckUsername(context context.Context, username string) web.UserResponses {
+func (services *UserServicesImpl) CheckUsername(ctx context.Context, username string) web.UserResponses {
 	// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	tx := services.Db.WithContext(context).Begin()
+	tx := services.Db.WithContext(ctx).Begin()
 	// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
 	defer utils.CommitRollback(tx)
 
 	// Call the CheckUsername method on the UserRepository field of the *UserServicesImpl struct,
 	// passing in the context, tx, and username variables as arguments.
 	// Assign the returned user and error to the user and err variables, respectively.
-	user, err := services.UserRepository.CheckUsername(context, tx, username)
+	user, err := services.UserRepository.CheckUsername(ctx, tx, username)
 
 	// If the err variable is not nil, call the NewErrorUnprocessableEntity function from the exceptions package
 	// and pass in the err.Error() and "username" as arguments. Panic with the returned error.
@@ -78,9 +78,9 @@ func (services *UserServicesImpl) CheckUsername(context context.Context, usernam
 
 // SaveSessionUser is a method on the *UserServicesImpl struct that saves a new session for a user in the database.
 // It takes in a context of type context.Context and a request of type web.SessionRequest as input parameters.
-func (services *UserServicesImpl) SaveSessionUser(context context.Context, request web.SessionRequest) {
+func (services *UserServicesImpl) SaveSessionUser(ctx context.Context, request web.SessionRequest) {
 	// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	tx := services.Db.WithContext(context).Begin()
+	tx := services.Db.WithContext(ctx).Begin()
 	// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
 	defer utils.CommitRollback(tx)
 
@@ -93,35 +93,35 @@ func (services *UserServicesImpl) SaveSessionUser(context context.Context, reque
 
 	// Call the StoreSessionUser method on the UserRepository field of the *UserServicesImpl struct,
 	// passing in the context, tx, and session variables as arguments.
-	services.UserRepository.StoreSessionUser(context, tx, session)
+	services.UserRepository.StoreSessionUser(ctx, tx, session)
 }
 
 // DestroySessionUser is a method on the *UserServicesImpl struct that removes a user's session from the database.
 // It takes in a context of type context.Context and an authToken of type string as input parameters.
-func (services *UserServicesImpl) DestroySessionUser(context context.Context, authToken string) {
+func (services *UserServicesImpl) DestroySessionUser(ctx context.Context, authToken string) {
 	// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	tx := services.Db.WithContext(context).Begin()
+	tx := services.Db.WithContext(ctx).Begin()
 	// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
 	defer utils.CommitRollback(tx)
 
 	// Call the DeleteSessionUser method on the UserRepository field of the *UserServicesImpl struct,
 	// passing in the context, tx, and authToken variables as arguments.
-	services.UserRepository.DeleteSessionUser(context, tx, authToken)
+	services.UserRepository.DeleteSessionUser(ctx, tx, authToken)
 }
 
 // GetSessionUser is a method on the *UserServicesImpl struct that retrieves a user from the database using a given authToken.
 // It takes in a context of type context.Context and an authToken of type string as input parameters.
 // It returns a web.UserResponses.
-func (services *UserServicesImpl) GetSessionUser(context context.Context, authToken string) web.UserResponses {
+func (services *UserServicesImpl) GetSessionUser(ctx context.Context, authToken string) web.UserResponses {
 	// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	tx := services.Db.WithContext(context).Begin()
+	tx := services.Db.WithContext(ctx).Begin()
 	// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
 	defer utils.CommitRollback(tx)
 
 	// Call the GetUserBySession method on the UserRepository field of the *UserServicesImpl struct,
 	// passing in the context, tx, and authToken variables as arguments.
 	// Assign the returned domain.User and error to user and err variables, respectively.
-	user, err := services.UserRepository.GetUserBySession(context, tx, authToken)
+	user, err := services.UserRepository.GetUserBySession(ctx, tx, authToken)
 	// If the error is not nil, panic with a new exceptions.NewErrorNotFound error that has the error message as its message.
 	if err != nil {
 		panic(exceptions.NewErrorNotFound(err.Error()))
@@ -131,3 +131,19 @@ func (services *UserServicesImpl) GetSessionUser(context context.Context, authTo
 	return web.ConvertToUserResponse(user)
 }
 
+// GetUserProfile retrieves a user's profile information from the database using the given IdUser, converts it to a web.UserProfileResponses value, and returns it.
+func (services *UserServicesImpl) GetUserProfile(ctx context.Context, IdUser uint) web.UserProfileResponses {
+	// Start a transaction
+	tx := services.Db.WithContext(ctx).Begin()
+	defer utils.CommitRollback(tx)
+
+	// Retrieve the user's profile information from the database
+	user, err := services.UserRepository.GetUserProfile(ctx, tx, IdUser)
+	if err != nil {
+		// If an error is returned, panic with a custom "not found" error
+		panic(exceptions.NewErrorNotFound(err.Error()))
+	}
+
+	// Convert the user's profile information to a web.UserProfileResponses value and return it
+	return web.ConvertToUserProfileResponse(user)
+}

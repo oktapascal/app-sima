@@ -10,9 +10,9 @@ import (
 	"github.com/oktapascal/app-barayya/utils"
 )
 
-// AuthControllerImpl is a struct that represents a controller for handling authentication-related actions.
+// AuthControllersImpl is a struct that represents a controller for handling authentication-related actions.
 // It has fields for a validator.Validate, services.UserServices, bootstraps.Jwt, and bootstraps.Cookie.
-type AuthControllerImpl struct {
+type AuthControllersImpl struct {
 	// Validate is a field of type *validator.Validate that is used to validate input data.
 	Validate *validator.Validate
 	// UserServices is a field of type services.UserServices that is used to perform actions related to users.
@@ -23,15 +23,15 @@ type AuthControllerImpl struct {
 	CookieConfig bootstraps.Cookie
 }
 
-// NewAuthControllerImpl is a function that returns a new *AuthControllerImpl struct.
+// NewAuthControllerImpl is a function that returns a new *AuthControllersImpl struct.
 // It takes in four input parameters:
 // - a validate of type *validator.Validate
 // - a userServices of type services.UserServices
 // - a jwtConfig of type bootstraps.Jwt
 // - a cookieConfig of type bootstraps.Cookie
-func NewAuthControllerImpl(validate *validator.Validate, userServices services.UserServices, jwtConfig bootstraps.Jwt, cookieConfig bootstraps.Cookie) *AuthControllerImpl {
-	// Return a new *AuthControllerImpl struct with its fields initialized with the input parameters.
-	return &AuthControllerImpl{
+func NewAuthControllerImpl(validate *validator.Validate, userServices services.UserServices, jwtConfig bootstraps.Jwt, cookieConfig bootstraps.Cookie) *AuthControllersImpl {
+	// Return a new *AuthControllersImpl struct with its fields initialized with the input parameters.
+	return &AuthControllersImpl{
 		Validate:     validate,
 		UserServices: userServices,
 		JwtConfig:    jwtConfig,
@@ -40,7 +40,7 @@ func NewAuthControllerImpl(validate *validator.Validate, userServices services.U
 }
 
 // Register handles a request to register a new user.
-func (controllers *AuthControllerImpl) Register(ctx *fiber.Ctx) error {
+func (controllers *AuthControllersImpl) Register(ctx *fiber.Ctx) error {
 	// Initialize a RegisterRequest struct and parse the request body into it.
 	request := new(web.RegisterRequest)
 	err := ctx.BodyParser(request)
@@ -64,7 +64,7 @@ func (controllers *AuthControllerImpl) Register(ctx *fiber.Ctx) error {
 }
 
 // Login handles a request to log in an existing user.
-func (controllers *AuthControllerImpl) Login(ctx *fiber.Ctx) error {
+func (controllers *AuthControllersImpl) Login(ctx *fiber.Ctx) error {
 	// Initialize a LoginRequest struct and parse the request body into it.
 	request := new(web.LoginRequest)
 	err := ctx.BodyParser(request)
@@ -112,7 +112,7 @@ func (controllers *AuthControllerImpl) Login(ctx *fiber.Ctx) error {
 }
 
 // Logout handles a request to log out the current user.
-func (controllers *AuthControllerImpl) Logout(ctx *fiber.Ctx) error {
+func (controllers *AuthControllersImpl) Logout(ctx *fiber.Ctx) error {
 	// Get the user context and the current user's auth token.
 	cntx := ctx.UserContext()
 	authToken := ctx.Cookies(controllers.CookieConfig.GetCookieToken())
@@ -133,7 +133,7 @@ func (controllers *AuthControllerImpl) Logout(ctx *fiber.Ctx) error {
 }
 
 // GetUserAccess handles a request to get the current user's access information.
-func (controllers *AuthControllerImpl) GetUserAccess(ctx *fiber.Ctx) error {
+func (controllers *AuthControllersImpl) GetUserAccess(ctx *fiber.Ctx) error {
 	// Get the user context and the current user's auth token.
 	cntx := ctx.UserContext()
 	authToken := ctx.Cookies(controllers.CookieConfig.GetCookieToken())

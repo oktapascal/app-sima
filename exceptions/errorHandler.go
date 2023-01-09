@@ -41,19 +41,26 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 	return internalServerError(ctx, err)
 }
 
+// forbiddenError handles "Forbidden" errors and returns them in an HTTP response.
+// If the given error is a "Forbidden" error, it returns true. Otherwise, it returns false.
 func forbiddenError(ctx *fiber.Ctx, err interface{}) bool {
-	exception := err.(*fiber.Error)
-	if exception.Error() == "Forbidden" {
-		response := web.JsonResponses{
-			StatusCode:    fiber.StatusForbidden,
-			StatusMessage: "Forbidden",
-			Data:          nil,
+	// Check if the err value is a *fiber.Error value
+	exception, ok := err.(*fiber.Error)
+
+	if ok {
+		// If the error message is "Forbidden", construct a web.JsonResponses value with a "Forbidden" status and return it in an HTTP response
+		if exception.Error() == "Forbidden" {
+			response := web.JsonResponses{
+				StatusCode:    fiber.StatusForbidden,
+				StatusMessage: "Forbidden",
+				Data:          nil,
+			}
+
+			err := ctx.Status(fiber.StatusForbidden).JSON(response)
+			utils.PanicIfError(err)
+
+			return true
 		}
-
-		err := ctx.Status(fiber.StatusForbidden).JSON(response)
-		utils.PanicIfError(err)
-
-		return true
 	}
 	return false
 }
@@ -191,7 +198,7 @@ func internalServerError(ctx *fiber.Ctx, err interface{}) error {
 	response := web.JsonResponses{
 		StatusCode:    fiber.StatusInternalServerError,
 		StatusMessage: "Internal Server Error",
-		Data:          nil,
+		Data:          err,
 	}
 
 	return ctx.Status(fiber.StatusInternalServerError).JSON(response)

@@ -63,8 +63,9 @@ func main() {
 	userServices := services.NewUserServicesImpl(userRepository, mySql)
 
 	authControllers := controllers.NewAuthControllerImpl(validate, userServices, jwtConfig, cookiesConfig)
+	profileControllers := controllers.NewProfileControllersImpl(validate, userServices)
 
-	routes.NewRouter(app, middlewareAuth, authControllers)
+	routes.NewRouter(app, middlewareAuth, authControllers, profileControllers)
 
 	// load static files
 	app.Static("/", "./ui/dist")

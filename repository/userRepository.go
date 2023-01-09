@@ -12,4 +12,5 @@ type UserRepository interface {
 	StoreSessionUser(ctx context.Context, db *gorm.DB, session domain.Session)
 	DeleteSessionUser(ctx context.Context, db *gorm.DB, authToken string)
 	GetUserBySession(ctx context.Context, db *gorm.DB, authToken string) (domain.User, error)
+	GetUserProfile(ctx context.Context, db *gorm.DB, IdUser uint) (domain.User, error)
 }
