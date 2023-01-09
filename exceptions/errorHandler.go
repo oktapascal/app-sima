@@ -8,6 +8,10 @@ import (
 	"github.com/oktapascal/app-barayya/utils"
 )
 
+// ErrorHandler handles different types of errors that may occur during the
+// processing of a request. It checks for specific error types and returns
+// appropriate responses to the client. If no specific error type is found,
+// it returns a generic internal server error response.
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
 
 	if notFoundError(ctx, err) {
@@ -30,9 +34,33 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 		return nil
 	}
 
+	if forbiddenError(ctx, err) {
+		return nil
+	}
+
 	return internalServerError(ctx, err)
 }
 
+func forbiddenError(ctx *fiber.Ctx, err interface{}) bool {
+	exception := err.(*fiber.Error)
+	if exception.Error() == "Forbidden" {
+		response := web.JsonResponses{
+			StatusCode:    fiber.StatusForbidden,
+			StatusMessage: "Forbidden",
+			Data:          nil,
+		}
+
+		err := ctx.Status(fiber.StatusForbidden).JSON(response)
+		utils.PanicIfError(err)
+
+		return true
+	}
+	return false
+}
+
+// validationError checks if the given error is a validation error and returns a
+// response with validation error messages to the client if it is. It returns
+// false if the error is not a validation error.
 func validationError(ctx *fiber.Ctx, err interface{}) bool {
 	exceptions, ok := err.(validator.ValidationErrors)
 
@@ -70,6 +98,9 @@ func validationError(ctx *fiber.Ctx, err interface{}) bool {
 	return false
 }
 
+// unprocessableEntityError checks if the given error is an unprocessable entity
+// error and returns a response with the error message to the client if it is.
+// It returns false if the error is not an unprocessable entity error.
 func unprocessableEntityError(ctx *fiber.Ctx, err error) bool {
 	exceptions, ok := err.(ErrorUnprocessableEntity)
 
@@ -89,6 +120,9 @@ func unprocessableEntityError(ctx *fiber.Ctx, err error) bool {
 	return false
 }
 
+// unauthorizedError checks if the given error is an unauthorized error and
+// returns a response with the error message to the client if it is. It returns
+// false if the error is not an unauthorized error.
 func unauthorizedError(ctx *fiber.Ctx, err interface{}) bool {
 	exceptions, ok := err.(ErrorUnauthorized)
 
@@ -108,6 +142,9 @@ func unauthorizedError(ctx *fiber.Ctx, err interface{}) bool {
 	return false
 }
 
+// badRequestError checks if the given error is a bad request error and returns
+// a response with the error message to the client if it is. It returns false
+// if the error is not a bad request error.
 func badRequestError(ctx *fiber.Ctx, err interface{}) bool {
 	exceptions, ok := err.(ErrorBadRequest)
 
@@ -127,6 +164,9 @@ func badRequestError(ctx *fiber.Ctx, err interface{}) bool {
 	return false
 }
 
+// notFoundError checks if the given error is a not found error and returns a
+// response with the error message to the client if it is. It returns false
+// if the error is not a not found error.
 func notFoundError(ctx *fiber.Ctx, err interface{}) bool {
 	exceptions, ok := err.(ErrorNotFound)
 
@@ -145,8 +185,9 @@ func notFoundError(ctx *fiber.Ctx, err interface{}) bool {
 	return false
 }
 
+// internalServerError returns a generic internal server error response to the
+// client.
 func internalServerError(ctx *fiber.Ctx, err interface{}) error {
-
 	response := web.JsonResponses{
 		StatusCode:    fiber.StatusInternalServerError,
 		StatusMessage: "Internal Server Error",

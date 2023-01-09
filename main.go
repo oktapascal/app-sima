@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/csrf"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/oktapascal/app-barayya/bootstraps"
 	"github.com/oktapascal/app-barayya/controllers"
@@ -16,6 +17,7 @@ import (
 	"github.com/oktapascal/app-barayya/utils"
 	"reflect"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -40,14 +42,22 @@ func main() {
 		return name
 	})
 
+	middlewareAuth := middleware.NewAuthenticationImpl(cookiesConfig, jwtConfig)
+
 	app.Use(recover.New())
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "*",
 		AllowHeaders:     "*",
 		AllowCredentials: true,
 	}))
-
-	middlewareAuth := middleware.NewAuthenticationImpl(cookiesConfig, jwtConfig)
+	app.Use(csrf.New(csrf.Config{
+		KeyLookup:      "cookie:csrf_",
+		CookieName:     "csrf_",
+		CookieHTTPOnly: true,
+		CookieSameSite: "Strict",
+		Expiration:     1 * time.Hour,
+		KeyGenerator:   utils.GenerateUUID,
+	}))
 
 	userRepository := repository.NewUserRepositoryImpl()
 	userServices := services.NewUserServicesImpl(userRepository, mySql)
