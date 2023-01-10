@@ -75,8 +75,9 @@ onBeforeUnmount(() => {
 
 <template>
   <NavbarBase>
-    <NavbarProtected v-if="authStore.getStatusAuthenticated" />
-    <NavbarGuest v-else />
+    <NavbarProtected />
+<!--    <NavbarProtected v-if="authStore.getStatusAuthenticated" />-->
+<!--    <NavbarGuest v-else />-->
   </NavbarBase>
   <main>
     <RouterView/>

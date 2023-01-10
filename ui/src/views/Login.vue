@@ -152,19 +152,25 @@ async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>
       <template #box-body>
         <VForm :initial-values="initialValues" :validation-schema="validationSchema" v-slot="{ meta: formMeta }"
           @submit="onSubmit">
-          <InputDefault name="username" placeholder="Username..." label="Username" type="text" :readonly="loading" />
-          <InputAppend name="password" placeholder="Password..." label="Password" :type="typeField" :readonly="loading" v-slot="slotProps"
-            @onClickIcon="togglePassword">
-            <IconEye v-if="isSecret" className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
+          <div class="flex flex-col w-full mb-4">
+            <InputDefault name="username" placeholder="Username..." label="Username" type="text" :readonly="loading" />
+          </div>
+          <div class="flex flex-col w-full mb-4">
+            <InputAppend name="password" placeholder="Password..." label="Password" :type="typeField" :readonly="loading" v-slot="slotProps"
+                         @onClickIcon="togglePassword">
+              <IconEye v-if="isSecret" className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
               'error': slotProps.isError
             }" />
-            <IconEyeOff v-else className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
+              <IconEyeOff v-else className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
               'error': slotProps.isError
             }" />
-          </InputAppend>
-          <ButtonDefault label="Sign In" type="submit"
-            className="bg-blue-700 text-white hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus-gray-500"
-            disabledClassName="cursor-not-allowed bg-blue-500 dark:bg-gray-500" :disabled="loading" />
+            </InputAppend>
+          </div>
+          <div class="flex flex-col w-full py-4">
+            <ButtonDefault label="Sign In" type="submit"
+               className="bg-blue-700 text-white hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus-gray-500"
+               disabledClassName="cursor-not-allowed bg-blue-500 dark:bg-gray-500" :disabled="loading" />
+          </div>
         </VForm>
       </template>
     </BoxDefault>

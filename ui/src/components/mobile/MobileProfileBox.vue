@@ -8,7 +8,8 @@ import IconMoon from "@/components/icon/IconMoon.vue"; // Import IconMoon compon
 import IconLogout from "@/components/icon/IconLogout.vue"; // Import IconLogout component
 import instance from "@/api/instance"; // Import instance object
 import { type IAlert, useAlertStore } from "@/stores/alert"; // Import IAlert type and useAlertStore hook from alert store
-import type {AxiosResponse} from "axios";
+import type {AxiosResponse} from "axios"; // This code imports the type AxiosResponse from the axios module
+
 
 // Define a generic response interface with a data field of type T
 interface Response<T> {
@@ -81,6 +82,9 @@ async function onSignOut() {
     // Reset the auth store
     authStore.$reset()
 
+    // Emit "onCloseProfileBox" event with false as the value
+    emits("onCloseProfileBox", false)
+
     // Navigate to the "/login" route
     await router.push({ path: "/login" })
   } catch (error: unknown) {
@@ -121,6 +125,18 @@ async function onFetchDataUser() {
   }
 }
 
+/*
+This function is called when the user clicks on the profile link.
+It emits an "onCloseProfileBox" event with a value of false and then asynchronously navigates to the "/protected/profile" route using the router.push method.
+*/
+async function onClickProfile() {
+  // Emit "onCloseProfileBox" event with false as the value
+  emits("onCloseProfileBox", false)
+
+  // Navigate to the profile page
+  await router.push({ path: "/protected/profile" })
+}
+
 // This function is called when the component is mounted. It calls the onFetchDataUser function to fetch data about
 // a user from an API.
 onMounted(async () => {
@@ -143,7 +159,7 @@ onMounted(async () => {
             <h6 class="text-lg text-gray-500 font-bold dark:text-white">Profile</h6>
           </div>
           <div class="flex-1 mt-2">
-            <button type="button" class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
+            <button type="button" class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500" @click="onClickProfile">
               <img alt="avatar" :src="user.foto" class="w-12 h-12 rounded-full"/>
               <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">{{ user.nama }}</span>
             </button>

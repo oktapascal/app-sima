@@ -31,7 +31,8 @@ function toggleMenu() {
     </div>
   </div>
   <div class="flex-none">
-    <NavbarMobile v-if="breakPointStore.checkIsMobile" />
-    <NavbarWeb v-else />
+    <NavbarMobile />
+<!--    <NavbarMobile v-if="breakPointStore.checkIsMobile" />-->
+<!--    <NavbarWeb v-else />-->
   </div>
 </template>

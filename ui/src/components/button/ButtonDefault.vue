@@ -27,7 +27,5 @@ function onClick() {
 </script>
 
 <template>
-  <div class="flex flex-col w-full py-4">
-    <button :disabled="props.disabled" :type="props.type" :class="[ props.disabled ? props.disabledClassName : '', props.className]" @click="onClick">{{ props.label }}</button>
-  </div>
+  <button :disabled="props.disabled" :type="props.type" :class="[ props.disabled ? props.disabledClassName : '', props.className]" @click="onClick">{{ props.label }}</button>
 </template>
