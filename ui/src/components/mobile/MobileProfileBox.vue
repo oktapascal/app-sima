@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from "vue"; // Import computed function from vue
+import { computed, reactive, onMounted } from "vue"; // Import computed function from vue
 import { useRouter } from "vue-router"; // Import useRouter hook from vue-router
 import { useThemeStore } from "@/stores/themes"; // Import useThemeStore hook from themes store
 import { useAuthStore } from "@/stores/auth"; // Import useAuthStore hook from auth store
@@ -8,6 +8,27 @@ import IconMoon from "@/components/icon/IconMoon.vue"; // Import IconMoon compon
 import IconLogout from "@/components/icon/IconLogout.vue"; // Import IconLogout component
 import instance from "@/api/instance"; // Import instance object
 import { type IAlert, useAlertStore } from "@/stores/alert"; // Import IAlert type and useAlertStore hook from alert store
+import type {AxiosResponse} from "axios";
+
+// Define a generic response interface with a data field of type T
+interface Response<T> {
+  data: T
+}
+
+// This interface extends the Response interface with a generic type that specifies the shape of the data
+// that the API will return in the response. The data will contain a 'nama' field of type string and a 'foto'
+// field of type string.
+interface UserResponse extends Response<{
+  nama: string
+  foto: string
+}>{}
+
+// This interface represents the shape of a user object that has a 'nama' field of type string and a 'foto' field
+// of type string.
+interface IUser {
+  nama: string
+  foto: string
+}
 
 // Initialize authStore hook with useAuthStore hook
 const authStore = useAuthStore()
@@ -23,6 +44,11 @@ const router = useRouter()
 
 // Declare emits object with "onCloseProfileBox" key
 const emits = defineEmits(["onCloseProfileBox"])
+
+const user = reactive<IUser>({
+  nama: "",
+  foto: ""
+})
 
 // Initialize themeText as a computed value that returns a string depending on the value of themeStore.isDark
 const themeText = computed(() => {
@@ -69,6 +95,37 @@ async function onSignOut() {
     alertStore.showAlert(alert)
   }
 }
+
+// This is an async function that fetches data about a user from an API. It uses the Axios library to make a GET
+// request to the '/profile/user' endpoint. The response is expected to be in the shape specified by the
+// UserResponse interface, which extends the Response interface with a generic type that specifies the shape of the
+// data that the API will return in the response.
+async function onFetchDataUser() {
+  try {
+    // Make a GET request to the '/profile/user' endpoint using the Axios instance
+    const response: AxiosResponse<UserResponse> = await instance.get("/profile/user")
+
+    // Update the user object with the data from the response, or with default values if the data is not available
+    user.nama = response.data.data.nama || "User"
+    user.foto = response.data.data.foto || "/images/avatars/avatar.png"
+  } catch (error: unknown) {
+    // If an error occurs, create an alert object with the appropriate values
+    const alert: IAlert = {
+      show: true,
+      type: "error",
+      text: "Terjadi kesalahan tidak diketahui"
+    }
+
+    // Show the alert by calling showAlert function on the alertStore
+    alertStore.showAlert(alert)
+  }
+}
+
+// This function is called when the component is mounted. It calls the onFetchDataUser function to fetch data about
+// a user from an API.
+onMounted(async () => {
+  await onFetchDataUser()
+})
 </script>
 
 <template>
@@ -87,8 +144,8 @@ async function onSignOut() {
           </div>
           <div class="flex-1 mt-2">
             <button type="button" class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
-              <img alt="avatar" src="/images/avatars/avatar.png" class="w-12 h-12 rounded-full"/>
-              <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">Nama User</span>
+              <img alt="avatar" :src="user.foto" class="w-12 h-12 rounded-full"/>
+              <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">{{ user.nama }}</span>
             </button>
           </div>
         </div>
