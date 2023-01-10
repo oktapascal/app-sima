@@ -1,25 +1,31 @@
 <script lang="ts" setup>
-import {ref, watch} from "vue"
-import IconCog from "@/components/icon/IconCog.vue";
-import ConfigBox from "@/components/config/ConfigBox.vue";
-import {useThemeStore} from "@/stores/themes";
+import { ref, watch } from "vue" // Import ref and watch functions from vue
+import IconCog from "@/components/icon/IconCog.vue"; // Import IconCog component
+import ConfigBox from "@/components/config/ConfigBox.vue"; // Import ConfigBox component
+import { useThemeStore } from "@/stores/themes"; // Import useThemeStore function from themes store
 
-const themeStore = useThemeStore();
+const themeStore = useThemeStore(); // Initialize theme store
 
+// Initialize openConfig variable as a ref with a default value of false
 const openConfig = ref<boolean>(false)
+
+// Initialize checked variable as a ref with a default value of the current value of themeStore.isDark
 const checked = ref(themeStore.isDark)
 
+// Declare onToggle function that takes a value of type boolean
 function onToggle(value: boolean) {
+  // Set the value of openConfig to the value passed to the function
   openConfig.value = value
 }
 
+// Watch the value of checked and run the callback function when it changes
 watch(checked, () => {
-  if (checked.value) {
-    themeStore.toggleMode("dark");
-    document.documentElement.classList.add("dark");
-  } else {
-    themeStore.toggleMode("light");
-    document.documentElement.classList.remove("dark");
+  if (checked.value) { // If the value of checked is true
+    themeStore.toggleMode("dark"); // Set the theme mode to dark
+    document.documentElement.classList.add("dark"); // Add the "dark" class to the document element
+  } else { // If the value of checked is false
+    themeStore.toggleMode("light"); // Set the theme mode to light
+    document.documentElement.classList.remove("dark"); // Remove the "dark" class from the document element
   }
 })
 </script>

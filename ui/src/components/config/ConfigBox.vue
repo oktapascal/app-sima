@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-import {ref} from "vue"
-import {onClickOutside} from "@vueuse/core"
+import { ref } from "vue" // Import ref function from vue
+import { onClickOutside } from "@vueuse/core" // Import onClickOutside function from vueuse/core
 
+// Initialize box as a ref with no default value
 const box = ref();
 
+// Declare emits object with "onToggle" key
 const emits = defineEmits(["onToggle"])
 
+// Call onClickOutside function with arguments box and a callback function
 onClickOutside(box, (event) => {
+  // Emit "onToggle" event with false as the value
   emits("onToggle", false)
 })
 </script>

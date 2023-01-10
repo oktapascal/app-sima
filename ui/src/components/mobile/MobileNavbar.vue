@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import Notification from "@/components/Notification.vue";
-import ProfileMobile from "@/components/mobile/MobileProfile.vue";
-import MobileProfileBox from "@/components/mobile/MobileProfileBox.vue";
+import { ref } from "vue"; // Import ref function from vue
+import Notification from "@/components/Notification.vue"; // Import Notification component
+import ProfileMobile from "@/components/mobile/MobileProfile.vue"; // Import MobileProfile component
+import MobileProfileBox from "@/components/mobile/MobileProfileBox.vue"; // Import MobileProfileBox component
 
+// Initialize openProfileBox variable as a ref with a default value of false
 const openProfileBox = ref<boolean>(false)
 
+// Declare onToggleProfileBox function that takes a value of type boolean
 function onToggleProfileBox(value: boolean) {
+  // Set the value of openProfileBox to the value passed to the function
   openProfileBox.value = value
 }
 </script>

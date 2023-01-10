@@ -1,30 +1,41 @@
 <script lang="ts" setup>
-import {useRouter} from "vue-router";
-import Notification from "@/components/Notification.vue";
-import ConfigApp from "@/components/config/ConfigApp.vue";
-import IconLogout from "@/components/icon/IconLogout.vue";
-import instance from "@/api/instance";
-import {type IAlert, useAlertStore} from "@/stores/alert";
-import {useAuthStore} from "@/stores/auth";
+import { useRouter } from "vue-router"; // Import useRouter hook from vue-router
+import Notification from "@/components/Notification.vue"; // Import Notification component
+import ConfigApp from "@/components/config/ConfigApp.vue"; // Import ConfigApp component
+import IconLogout from "@/components/icon/IconLogout.vue"; // Import IconLogout component
+import instance from "@/api/instance"; // Import instance object
+import { type IAlert, useAlertStore } from "@/stores/alert"; // Import IAlert type and useAlertStore hook from alert store
+import { useAuthStore } from "@/stores/auth"; // Import useAuthStore hook from auth store
 
+// Initialize authStore hook with useAuthStore hook
 const authStore = useAuthStore()
+
+// Initialize alertStore hook with useAlertStore hook
 const alertStore = useAlertStore()
 
+// Initialize router hook with useRouter hook
 const router = useRouter()
 
+// Declare onSignOut function that returns a Promise
 async function onSignOut() {
   try {
+    // Make a POST request to the "/auth/logout" endpoint using the instance object
     await instance.post("/auth/logout")
 
+    // Reset the auth store
     authStore.$reset()
+
+    // Navigate to the "/login" route
     await router.push({ path: "/login" })
   } catch (error: unknown) {
+    // If an error occurs, create an alert object with the appropriate values
     const alert: IAlert = {
       show: true,
       type: "error",
       text: "Terjadi kesalahan tidak diketahui"
     }
 
+    // Show the alert by calling showAlert function on the alertStore
     alertStore.showAlert(alert)
   }
 }

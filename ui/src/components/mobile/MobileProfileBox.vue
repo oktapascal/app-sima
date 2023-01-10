@@ -1,53 +1,71 @@
 <script lang="ts" setup>
-import {computed} from "vue";
-import {useRouter} from "vue-router";
-import {useThemeStore} from "@/stores/themes";
-import {useAuthStore} from "@/stores/auth";
-import IconWindowClose from "@/components/icon/IconWindowClose.vue";
-import IconMoon from "@/components/icon/IconMoon.vue";
-import IconLogout from "@/components/icon/IconLogout.vue";
-import instance from "@/api/instance";
-import {type IAlert, useAlertStore} from "@/stores/alert";
+import { computed } from "vue"; // Import computed function from vue
+import { useRouter } from "vue-router"; // Import useRouter hook from vue-router
+import { useThemeStore } from "@/stores/themes"; // Import useThemeStore hook from themes store
+import { useAuthStore } from "@/stores/auth"; // Import useAuthStore hook from auth store
+import IconWindowClose from "@/components/icon/IconWindowClose.vue"; // Import IconWindowClose component
+import IconMoon from "@/components/icon/IconMoon.vue"; // Import IconMoon component
+import IconLogout from "@/components/icon/IconLogout.vue"; // Import IconLogout component
+import instance from "@/api/instance"; // Import instance object
+import { type IAlert, useAlertStore } from "@/stores/alert"; // Import IAlert type and useAlertStore hook from alert store
 
+// Initialize authStore hook with useAuthStore hook
 const authStore = useAuthStore()
+
+// Initialize themeStore hook with useThemeStore hook
 const themeStore = useThemeStore()
+
+// Initialize alertStore hook with useAlertStore hook
 const alertStore = useAlertStore()
 
+// Initialize router hook with useRouter hook
 const router = useRouter()
 
+// Declare emits object with "onCloseProfileBox" key
 const emits = defineEmits(["onCloseProfileBox"])
 
+// Initialize themeText as a computed value that returns a string depending on the value of themeStore.isDark
 const themeText = computed(() => {
   return themeStore.isDark ? "Dark Mode" : "Light Mode"
 })
 
+// Declare onCloseProfileBox function that does not take any arguments and does not return a value
 function onCloseProfileBox() {
+  // Emit "onCloseProfileBox" event with false as the value
   emits("onCloseProfileBox", false)
 }
 
+// Declare toggleThemes function that takes a value of type string
 function toggleThemes(value: string) {
-  if(value === "light") {
-    themeStore.toggleMode("dark")
-    document.documentElement.classList.add("dark");
-  } else {
-    themeStore.toggleMode("light")
-    document.documentElement.classList.remove("dark");
+  if(value === "light") { // If the value is "light"
+    themeStore.toggleMode("dark") // Set the theme mode to dark
+    document.documentElement.classList.add("dark"); // Add the "dark" class to the document element
+  } else { // If the value is not "light"
+    themeStore.toggleMode("light") // Set the theme mode to light
+    document.documentElement.classList.remove("dark"); // Remove the "dark" class from the document element
   }
 }
 
+// Declare onSignOut function that returns a Promise
 async function onSignOut() {
   try {
+    // Make a POST request to the "/auth/logout" endpoint using the instance object
     await instance.post("/auth/logout")
 
+    // Reset the auth store
     authStore.$reset()
+
+    // Navigate to the "/login" route
     await router.push({ path: "/login" })
   } catch (error: unknown) {
+    // If an error occurs, create an alert object with the appropriate values
     const alert: IAlert = {
       show: true,
       type: "error",
       text: "Terjadi kesalahan tidak diketahui"
     }
 
+    // Show the alert by calling showAlert function on the alertStore
     alertStore.showAlert(alert)
   }
 }

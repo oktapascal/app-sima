@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import {withDefaults} from "vue";
+import { withDefaults } from "vue"; // Import withDefaults function from vue
 
+// Declare Props interface with five properties: type, name, placeholder, label, and readonly
 interface Props {
   type: string;
   name: string;
@@ -9,13 +10,18 @@ interface Props {
   readonly?: boolean;
 }
 
+// Initialize props variable with the result of calling withDefaults on defineProps function, and specify the type as the Props interface.
+// Also pass an object with the key "readonly" set to false as the second argument to withDefaults
 const props = withDefaults(defineProps<Props>(), {
   readonly: false,
 });
 
+// Declare emits object with "onClickIcon" key
 const emits = defineEmits(['onClickIcon'])
 
+// Declare onClickIcon function that does not take any arguments and does not return a value
 function onClickIcon(): void {
+  // Emit "onClickIcon" event
   emits('onClickIcon')
 }
 </script>

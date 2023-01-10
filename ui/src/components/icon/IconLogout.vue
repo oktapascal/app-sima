@@ -1,8 +1,10 @@
 <script lang="ts" setup>
+// Declare Props interface with a single property "className" of type string
 interface Props {
   className: string
 }
 
+// Initialize props variable with defineProps function and specify the type as the Props interface
 const props = defineProps<Props>()
 </script>
 

@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import {useBreakPointStore} from "@/stores/breakpoint";
-import IconMenu from "@/components/icon/IconMenu.vue";
-import IconMenuOpen from "@/components/icon/IconMenuOpen.vue";
-import NavbarMobile from "@/components/mobile/MobileNavbar.vue";
-import NavbarWeb from "@/components/web/WebNavbar.vue";
+import { ref } from "vue"; // Import ref function from vue
+import { useBreakPointStore } from "@/stores/breakpoint"; // Import useBreakPointStore hook from breakpoint store
+import IconMenu from "@/components/icon/IconMenu.vue"; // Import IconMenu component
+import IconMenuOpen from "@/components/icon/IconMenuOpen.vue"; // Import IconMenuOpen component
+import NavbarMobile from "@/components/mobile/MobileNavbar.vue"; // Import NavbarMobile component
+import NavbarWeb from "@/components/web/WebNavbar.vue"; // Import NavbarWeb component
 
+// Initialize breakPointStore hook with useBreakPointStore hook
 const breakPointStore = useBreakPointStore()
 
+// Initialize menuOpen as a ref with an initial value of false
 const menuOpen = ref<boolean>(false)
 
+// Declare toggleMenu function that does not take any arguments and does not return a value
 function toggleMenu() {
+  // Toggle the value of menuOpen between true and false
   menuOpen.value = !menuOpen.value
 }
 </script>

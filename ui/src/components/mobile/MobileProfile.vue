@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+// Declare emits object with "onShowProfileBox" key
 const emits = defineEmits(["onShowProfileBox"])
 
+// Declare onShowProfileBox function that does not take any arguments and does not return a value
 function onShowProfileBox() {
+  // Emit "onShowProfileBox" event with true as the value
   emits("onShowProfileBox", true)
 }
 </script>

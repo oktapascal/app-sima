@@ -2,16 +2,22 @@
 import {computed} from "vue"
 import {useAlertStore} from "@/stores/alert";
 
+// Props interface for the ButtonAlert component
 interface Props {
   label: string
 }
 
+// Use the alert store
 const alertStore = useAlertStore()
 
+// Define the props for the component
 const props = defineProps<Props>()
 
+// Define the events emitted by the component
 const emits = defineEmits(["onClick"])
 
+// Create a computed property for the button class
+// based on the type of alert (success, error, warning, or info)
 const buttonTypeClass = computed(() => {
   if(alertStore.getAlert.type === "success") {
     return "success-btn"
@@ -28,9 +34,11 @@ const buttonTypeClass = computed(() => {
   return "default-btn"
 })
 
+// Emit an onClick event when the button is clicked
 function onClick() {
   emits("onClick")
 }
+
 </script>
 
 <template>

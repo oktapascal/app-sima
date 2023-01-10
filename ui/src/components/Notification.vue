@@ -1,12 +1,15 @@
 <script lang="ts" setup>
-import {withDefaults} from "vue"
-import IconBell from "@/components/icon/IconBell.vue";
+import { withDefaults } from "vue"; // Import withDefaults function from vue
+import IconBell from "@/components/icon/IconBell.vue"; // Import IconBell component
 
+// Define the Props interface with a single property, total, of type number
 interface Props {
-  total: number
+  total?: number
 }
+
+// Initialize props with withDefaults function, which takes the output of defineProps function and an object of default values
 const props = withDefaults(defineProps<Props>(), {
-  total: 0
+  total: 0 // Set the default value of total to 0
 })
 </script>
 

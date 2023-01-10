@@ -36,26 +36,36 @@ const router = createRouter({
     ],
 });
 
-router.beforeEach(async (to,from, next) => {
+router.beforeEach(async (to, from, next) => {
+    // Initialize auth hook with useAuthStore hook
     const auth = useAuthStore()
 
-    if(!auth.getStatusAuthenticated) {
+    // If the user is not authenticated
+    if (!auth.getStatusAuthenticated) {
+        // Set the user session using their stored credentials
         await auth.setUserSessionFromCredentials()
     }
 
-    if(to.meta.requiresAuth) {
-        if(auth.getStatusAuthenticated) {
+    // If the route that the user is trying to access requires authentication
+    if (to.meta.requiresAuth) {
+        // If the user is authenticated
+        if (auth.getStatusAuthenticated) {
+            // Allow the user to access the route
             return next()
         } else {
+            // Redirect the user to the login page
             return next({ path: "/login" })
         }
     } else {
-        if(auth.getStatusAuthenticated) {
+        // If the user is authenticated
+        if (auth.getStatusAuthenticated) {
+            // Redirect the user to the dashboard
             return next({ path: "/protected/dashboard"})
         } else {
+            // Allow the user to access the route
             return next()
         }
     }
-})
+});
 
 export default router;

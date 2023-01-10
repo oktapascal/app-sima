@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import IconSun from "@/components/icon/IconSun.vue"
-import IconMoon from "@/components/icon/IconMoon.vue";
-import { useThemeStore } from "@/stores/themes";
+import IconSun from "@/components/icon/IconSun.vue" // Import IconSun component
+import IconMoon from "@/components/icon/IconMoon.vue"; // Import IconMoon component
+import { useThemeStore } from "@/stores/themes"; // Import useThemeStore hook from themes store
 
+// Initialize themeStore hook with useThemeStore hook
 const themeStore = useThemeStore()
 
+// Declare toggleThemes function that takes a value of type string
 function toggleThemes(value: string) {
-  if(value === "light") {
-    themeStore.toggleMode("dark")
-    document.documentElement.classList.add("dark");
-  } else {
-    themeStore.toggleMode("light")
-    document.documentElement.classList.remove("dark");
+  if(value === "light") { // If the value is "light"
+    themeStore.toggleMode("dark") // Set the theme mode to dark
+    document.documentElement.classList.add("dark"); // Add the "dark" class to the document element
+  } else { // If the value is not "light"
+    themeStore.toggleMode("light") // Set the theme mode to light
+    document.documentElement.classList.remove("dark"); // Remove the "dark" class from the document element
   }
 }
 </script>

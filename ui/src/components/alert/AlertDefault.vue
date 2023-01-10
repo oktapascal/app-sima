@@ -8,15 +8,21 @@ import IconAlertCircle from "@/components/icon/IconAlertCircle.vue";
 import IconCheckCircle from "@/components/icon/IconCheckCircle.vue";
 import ButtonAlert from "@/components/button/ButtonAlert.vue";
 
+// Import and use the breakpoint and alert stores
 const breakPointStore = useBreakPointStore()
 const alertStore = useAlertStore()
 
+// Create a ref to store a timeout ID
 let time = ref<null|number>(null)
 
+// Create a computed property for the alert position
+// (top-center for mobile, bottom-right for desktop)
 const position = computed(() => {
   return breakPointStore.checkIsMobile ? "top-center" : "bottom-right"
 })
 
+// Create a computed property for the alert text
+// based on the type of alert (success, error, warning, or info)
 const text = computed(() => {
   if(alertStore.getAlert.type === "success") {
     return "Success Message"
@@ -33,16 +39,19 @@ const text = computed(() => {
   return "Information"
 })
 
+// Reset the alert store when the alert is closed
 function onClose() {
   alertStore.$reset()
 }
 
+// When the component is mounted, set a timeout to reset the alert store
 onMounted(() => {
   time.value = setTimeout(() => {
     alertStore.$reset()
   }, 5000)
 })
 
+// Clear the timeout when the component is unmounted
 onBeforeUnmount(() => {
   clearTimeout(time.value!)
 })
