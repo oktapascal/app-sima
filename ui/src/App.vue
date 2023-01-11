@@ -79,7 +79,7 @@ onBeforeUnmount(() => {
 <!--    <NavbarProtected v-if="authStore.getStatusAuthenticated" />-->
 <!--    <NavbarGuest v-else />-->
   </NavbarBase>
-  <main>
+  <main class="lg:px-2.5 lg:pb-2.5">
     <RouterView/>
   </main>
   <Teleport to="body">

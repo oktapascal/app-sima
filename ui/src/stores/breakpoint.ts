@@ -7,7 +7,7 @@ export const useBreakPointStore = defineStore("breakpoint", {
     }),
     // Define a getter that returns the value of isMobile from the state
     getters: {
-        checkIsMobile: (state) => state.isMobile,
+        checkIsMobile: (state): boolean => state.isMobile,
     },
     // Define an action that updates the value of isMobile in the state
     actions: {
