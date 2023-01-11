@@ -13,4 +13,5 @@ func NewProfileRoutes(router fiber.Router, profileControllers controllers.Profil
 	}, 10*time.Second))
 
 	router.Get("/user", timeout.New(profileControllers.GetUser, 10*time.Second))
+	router.Put("/user", timeout.New(profileControllers.UpdateUser, 10*time.Second))
 }

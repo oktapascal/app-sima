@@ -79,6 +79,16 @@ func validationError(ctx *fiber.Ctx, err interface{}) bool {
 			switch err.Tag() {
 			case "required":
 				message = fmt.Sprintf("%s wajib diisi", err.Field())
+			case "number":
+				message = fmt.Sprintf("%s hanya berupa angka", err.Field())
+			case "len":
+				message = fmt.Sprintf("%s hanya terdiri dari %s karakter", err.Field(), err.Param())
+			case "min":
+				message = fmt.Sprintf("%s minimal terdiri dari %s karakter", err.Field(), err.Param())
+			case "max":
+				message = fmt.Sprintf("%s maksimal terdiri dari %s karakter", err.Field(), err.Param())
+			case "email":
+				message = fmt.Sprintf("%s tidak valid", err.Field())
 			default:
 				message = exceptions.Error()
 			}
