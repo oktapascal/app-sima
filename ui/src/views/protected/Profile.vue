@@ -2,6 +2,31 @@
 import IconCamera from "@/components/icon/IconCamera.vue";  // Import the camera icon component
 import InputDefault from "@/components/input/InputDefault.vue"; // Import the default input field component
 import ButtonDefault from "@/components/button/ButtonDefault.vue"; // Import the default button component
+
+interface ProfileRequest {
+  nik: string|null,
+  nama: string|null,
+  alamat: string|null,
+  no_telp: string|null,
+  email: string|null
+  [key: string]: any
+}
+
+const initialValues: ProfileRequest = {
+  nik: "",
+  nama: "",
+  alamat: "",
+  email: "",
+  no_telp: ""
+}
+
+const validationSchema = {
+  nik: "required|min:5",
+  nama: "required",
+  alamat: "required",
+  email: "required|email",
+  no_telp: "required|min:11|max:12"
+}
 </script>
 
 <template>
@@ -23,9 +48,9 @@ import ButtonDefault from "@/components/button/ButtonDefault.vue"; // Import the
         </div>
       </div>
       <div class="flex flex-col flex-1 my-4 lg:my-0">
-        <form>
+        <VForm :initial-values="initialValues" :validation-schema="validationSchema">
           <div class="my-2.5">
-            <InputDefault name="nik" placeholder="NIK" label="NIK" type="text" />
+            <InputDefault name="nik" placeholder="NIK" label="NIK" type="number" />
           </div>
           <div class="my-2.5">
             <InputDefault name="nama" placeholder="Nama" label="Nama" type="text" />
@@ -34,7 +59,7 @@ import ButtonDefault from "@/components/button/ButtonDefault.vue"; // Import the
             <InputDefault name="email" placeholder="Email" label="Email" type="email" />
           </div>
           <div class="my-2.5">
-            <InputDefault name="no_telp" placeholder="Nomor Telepon" label="Nomor Telepon" type="text" />
+            <InputDefault name="no_telp" placeholder="Nomor Telepon" label="Nomor Telepon" type="number" />
           </div>
           <div class="my-2.5">
             <InputDefault name="alamat" placeholder="Alamat" label="Alamat" type="text" />
@@ -45,7 +70,7 @@ import ButtonDefault from "@/components/button/ButtonDefault.vue"; // Import the
              disabledClassName="cursor-not-allowed bg-blue-500 dark:bg-gray-500"
             />
           </div>
-        </form>
+        </VForm>
       </div>
     </div>
   </div>

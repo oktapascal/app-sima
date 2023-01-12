@@ -5,14 +5,8 @@ import { ref, computed } from "vue"
 // Import the useRouter hook from the vue-router library
 import {useRouter} from "vue-router";
 
-// Import the zod library for schema validation
-import * as zod from "zod"
-
 // Import the FormActions type from the vee-validate library
 import type { FormActions } from "vee-validate";
-
-// Import the toFormValidator function for converting a zod schema to a vee-validate form validator
-import { toFormValidator } from "@vee-validate/zod"
 
 // Import an instance of the axios library for making HTTP requests
 import instance from "@/api/instance";
@@ -77,14 +71,14 @@ const typeField = computed(() => {
   return isSecret.value ? "password" : "text"
 })
 
-// Use the toFormValidator function to convert a zod schema to a vee-validate form validator
-const validationSchema = toFormValidator(
-    zod.object({
-      // Validate that the username field is a string with a minimum length of 1
-      username: zod.string().min(1, "Wajib Diisi"),
-      // Validate that the password field is a string with a minimum length of 1
-      password: zod.string().min(1, "Wajib Diisi")
-    }))
+// Define validation schema for the form
+// This object contains fields that need to be validated and the corresponding validation rule
+const validationSchema = {
+  // "username" field is required
+  username: "required",
+  // "password" field is required
+  password: "required"
+}
 
 // Toggle the value of the isSecret reactive variable between true and false
 function togglePassword() {
