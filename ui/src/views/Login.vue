@@ -1,137 +1,71 @@
 <script lang="ts" setup>
-// Import various functions and types from the Vue.js library
-import { ref, computed } from "vue"
-
-// Import the useRouter hook from the vue-router library
+import {ref, computed} from "vue";
 import {useRouter} from "vue-router";
-
-// Import the FormActions type from the vee-validate library
-import type { FormActions } from "vee-validate";
-
-// Import an instance of the axios library for making HTTP requests
+import type {FormActions} from "vee-validate";
 import instance from "@/api/instance";
-
-// Import various types from the axios library
 import {AxiosError, type AxiosResponse} from "axios";
+import {useAlertStore} from "@/stores/alert";
+import {useAuthStore} from "@/stores/auth";
+import type {IAuthResponse, ILoginRequest, IAlert, IAuth} from "@/types";
+import {BoxDefault, InputDefault, InputAppend, IconEye, IconEyeOff, ButtonDefault} from "@/components";
 
-// Import the useAlertStore and IAlert types from the alert store
-import {useAlertStore, type IAlert} from "@/stores/alert";
+const router = useRouter();
+const alertStore = useAlertStore();
+const authStore = useAuthStore();
 
-// Import the useAuthStore and IAuth types from the auth store
-import {useAuthStore, type IAuth} from "@/stores/auth";
+const initialValues: ILoginRequest = {username: "", password: ""};
 
-// Import various Vue components
-import BoxDefault from "@/components/box/BoxDefault.vue";
-import InputDefault from "@/components/input/InputDefault.vue";
-import InputAppend from "@/components/input/InputAppend.vue";
-import IconEye from "@/components/icon/IconEye.vue";
-import IconEyeOff from "@/components/icon/IconEyeOff.vue";
-import ButtonDefault from "@/components/button/ButtonDefault.vue";
+const loading = ref<boolean>(false);
 
-// Define the shape of a login request object
-interface LoginRequest {
-  username: string
-  password: string
-  [key: string]: any
-}
+const isSecret = ref<boolean>(true);
 
-// Define a generic response interface with a data field of type T
-interface Response<T> {
-  data: T
-}
-
-// Define an interface for an authentication response, extending the Response interface and specifying the shape of the data field
-interface AuthResponse extends Response<{
-  id_user: string
-  kode_lokasi: string
-  role: string
-  isAuthenticated: boolean
-}> {}
-
-// Use the useRouter hook from the vue-router library to access the Vue router instance
-const router = useRouter()
-
-// Use the useAlertStore custom hook to access the alert store in the component
-const alertStore = useAlertStore()
-
-// Use the useAuthStore custom hook to access the auth store in the component
-const authStore = useAuthStore()
-
-// Define the initial values for the login form fields
-const initialValues: LoginRequest = { username: "", password: "" }
-
-// Create a reactive variable to track whether the form is currently being submitted
-const loading = ref<boolean>(false)
-
-// Create a reactive variable to toggle the visibility of the password field in the form
-const isSecret = ref<boolean>(true)
-
-// Create a computed property that returns "password" or "text" based on the value of isSecret
 const typeField = computed(() => {
-  return isSecret.value ? "password" : "text"
-})
+  return isSecret.value ? "password" : "text";
+});
 
-// Define validation schema for the form
-// This object contains fields that need to be validated and the corresponding validation rule
 const validationSchema = {
-  // "username" field is required
   username: "required",
-  // "password" field is required
-  password: "required"
-}
+  password: "required",
+};
 
-// Toggle the value of the isSecret reactive variable between true and false
 function togglePassword() {
-  isSecret.value = !isSecret.value
+  isSecret.value = !isSecret.value;
 }
 
-// Define an async function to handle the submission of the login form
-async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>) {
-  // Set the loading reactive variable to true to indicate that the form is being submitted
-  loading.value = true
+async function onSubmit(values: ILoginRequest, actions: FormActions<ILoginRequest>) {
+  loading.value = true;
   try {
-    // Make a POST request to the /auth/login endpoint with the login form values as the request body
-    const response: AxiosResponse<AuthResponse> = await instance.post("/auth/login", values)
+    const response: AxiosResponse<IAuthResponse> = await instance.post("/auth/login", values);
 
-    // Extract the relevant data from the response and store it in an IAuth object
     const data: IAuth = {
       id_user: response.data.data.id_user,
       kode_lokasi: response.data.data.kode_lokasi,
       role: response.data.data.role,
-      isAuthenticated: true
-    }
+      isAuthenticated: true,
+    };
 
-    // Store the user's authentication data in the auth store
-    authStore.setUserSession(data)
+    authStore.setUserSession(data);
 
-    // Navigate to the protected dashboard route
-    await router.push({ path: "/protected/dashboard" })
-  } // Define the catch block of the try-catch statement in the onSubmit function
-  catch (error: unknown) {
-    // Check if the error is an instance of AxiosError
+    await router.push({path: "/protected/dashboard"});
+  } catch (error: unknown) {
     if (error instanceof AxiosError) {
-      // Check the status of the error's response
       if (error.response?.status === 422) {
-        // Extract the field and message from the response data
-        const field = error.response.data?.data.Param
-        const message = error.response.data?.data.ErrorMessage
+        const field = error.response.data?.data.Param;
+        const message = error.response.data?.data.ErrorMessage;
 
-        // Display the error message in the form next to the appropriate field
-        actions.setFieldError(field, message)
+        actions.setFieldError(field, message);
       }
     } else {
-      // If the error is not an instance of AxiosError, show an error alert to the user
       const alert: IAlert = {
         show: true,
         type: "error",
-        text: "Terjadi kesalahan tidak diketahui"
-      }
+        text: "Terjadi kesalahan tidak diketahui",
+      };
 
-      alertStore.showAlert(alert)
+      alertStore.showAlert(alert);
     }
-  } // Reset the loading state in the finally block
-  finally {
-    loading.value = false
+  } finally {
+    loading.value = false;
   }
 
 }
@@ -141,29 +75,30 @@ async function onSubmit(values: LoginRequest, actions: FormActions<LoginRequest>
   <div class="flex justify-center mt-16">
     <BoxDefault>
       <template #box-header>
-        <img alt="logo" class="h-16 lg:h-20" src="/images/logo.jpeg" />
+        <img alt="logo" class="h-16 lg:h-20" src="/images/logo.jpeg"/>
       </template>
       <template #box-body>
         <VForm :initial-values="initialValues" :validation-schema="validationSchema" v-slot="{ meta: formMeta }"
-          @submit="onSubmit">
+               @submit="onSubmit">
           <div class="flex flex-col w-full mb-4">
-            <InputDefault name="username" placeholder="Username..." label="Username" type="text" :readonly="loading" />
+            <InputDefault name="username" placeholder="Username..." label="Username" type="text" :readonly="loading"/>
           </div>
           <div class="flex flex-col w-full mb-4">
-            <InputAppend name="password" placeholder="Password..." label="Password" :type="typeField" :readonly="loading" v-slot="slotProps"
+            <InputAppend name="password" placeholder="Password..." label="Password" :type="typeField"
+                         :readonly="loading" v-slot="slotProps"
                          @onClickIcon="togglePassword">
-              <IconEye v-if="isSecret" className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
+              <IconEye v-if="isSecret" className="icon h-7 w-7 text-gray-400 dark:text-gray-100" :class="{
               'error': slotProps.isError
-            }" />
+            }"/>
               <IconEyeOff v-else className="icon h-7 w-7 fill-current dark:text-gray-100" :class="{
               'error': slotProps.isError
-            }" />
+            }"/>
             </InputAppend>
           </div>
           <div class="flex flex-col w-full py-4">
             <ButtonDefault label="Sign In" type="submit"
-               className="bg-blue-700 text-white hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus-gray-500"
-               disabledClassName="cursor-not-allowed bg-blue-500 dark:bg-gray-500" :disabled="loading" />
+                           className="bg-blue-700 text-white hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus-gray-500"
+                           disabledClassName="cursor-not-allowed bg-blue-500 dark:bg-gray-500" :disabled="loading"/>
           </div>
         </VForm>
       </template>

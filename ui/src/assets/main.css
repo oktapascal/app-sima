@@ -4,7 +4,7 @@
 
 @layer components {
     .icon {
-        @apply transition duration-300 dark:text-white;
+        @apply transition duration-300;
     }
     .label.error {
         @apply text-red-500 dark:text-red-700;

@@ -1,0 +1,16 @@
+export {default as IconAlert} from "./IconAlert.vue";
+export {default as IconAlertBox} from "./IconAlertBox.vue";
+export {default as IconAlertCircle} from "./IconAlertCircle.vue";
+export {default as IconBell} from "./IconBell.vue";
+export {default as IconCamera} from "./IconCamera.vue";
+export {default as IconCheckCircle} from "./IconCheckCircle.vue";
+export {default as IconCloseCircle} from "./IconCloseCircle.vue";
+export {default as IconCog} from "./IconCog.vue";
+export {default as IconEye} from "./IconEye.vue";
+export {default as IconEyeOff} from "./IconEyeOff.vue";
+export {default as IconLogout} from "./IconLogout.vue";
+export {default as IconMenu} from "./IconMenu.vue";
+export {default as IconMenuOpen} from "./IconMenuOpen.vue";
+export {default as IconMoon} from "./IconMoon.vue";
+export {default as IconSun} from "./IconSun.vue";
+export {default as IconWindowClose} from "./IconWindowClose.vue";

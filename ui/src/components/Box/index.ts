@@ -1,0 +1,1 @@
+export {default as BoxDefault} from "./BoxDefault.vue";

@@ -1,78 +1,79 @@
-import axios from "axios"
-import routes from "@/router"
-import {useAlertStore, type IAlert} from "@/stores/alert";
+import axios from "axios";
+import routes from "@/router";
+import type {IAlert} from "@/types";
+import {useAlertStore} from "@/stores/alert";
 
 // Import the base URL from the environment
-const BASE_URL = import.meta.env.VITE_BASE_URL
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Create a new instance of axios with specified base URL
 const instance = axios.create({
     withCredentials: true, // Include credentials in requests
-    baseURL: BASE_URL // Set the base URL for all requests
-})
+    baseURL: BASE_URL, // Set the base URL for all requests
+});
 
 // Add an interceptor to all requests made with this instance
 // of axios to include credentials
 instance.interceptors.request.use(function (config) {
-    config.withCredentials = true // Include credentials in request
+    config.withCredentials = true; // Include credentials in request
 
-    return config
+    return config;
 }, function (error) {
-    return Promise.reject(error) // Reject the request if there is an error
-})
+    return Promise.reject(error); // Reject the request if there is an error
+});
 
 // Set up an Axios response interceptor to handle HTTP errors
 instance.interceptors.response.use(
     // If the request was successful, simply return the response
     function (response) {
-        return response
+        return response;
     },
     // If the request returned an error, handle it here
     async function (error) {
-        // Get a reference to the alert store
-        const alertStore = useAlertStore()
+        // Get a reference to the Alert store
+        const alertStore = useAlertStore();
 
         // If the error is a 401 Unauthorized error, redirect the user to the login page
-        if(error.response.status === 401) {
-            let redirectUrl = ""
-            if(routes.currentRoute.value.path !== "/login") {
-                redirectUrl = routes.currentRoute.value.path
+        if (error.response.status === 401) {
+            let redirectUrl = "";
+            if (routes.currentRoute.value.path !== "/login") {
+                redirectUrl = routes.currentRoute.value.path;
             }
 
             await routes.push({
                 path: "/login",
                 query: {
-                    redirect: redirectUrl
-                }
-            })
+                    redirect: redirectUrl,
+                },
+            });
         }
 
-        // If the error is a 404 Not Found error, show an error alert with the status message
-        if(error.response.status === 404) {
+        // If the error is a 404 Not Found error, show an error Alert with the status message
+        if (error.response.status === 404) {
             const alert: IAlert = {
                 show: true,
                 type: "error",
-                text: error.response.data?.statusMessage
-            }
+                text: error.response.data?.statusMessage,
+            };
 
-            alertStore.showAlert(alert)
+            alertStore.showAlert(alert);
         }
 
-        // If the error is a 500 Internal Server Error, show a generic error alert
+        // If the error is a 500 Internal Server Error, show a generic error Alert
         if (error.response?.status === 500) {
             const alert: IAlert = {
                 show: true,
                 type: "error",
-                text: "Terjadi kesalahan pada server"
-            }
+                text: "Terjadi kesalahan pada server",
+            };
 
-            alertStore.showAlert(alert)
+            alertStore.showAlert(alert);
         }
 
-        // Return the error so it can be handled by a catch block in the code that made the HTTP request
-        return Promise.reject(error)
-    }
-)
+        // Return the error, so it can be handled by a catch block in the code that made the HTTP request
+        return Promise.reject(error);
+    },
+);
 
 // Export the Axios instance with the interceptor attached
-export default instance
+export default instance;
