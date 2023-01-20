@@ -57,47 +57,63 @@ func (services *UserServicesImpl) Register(ctx context.Context, request web.Regi
 }
 
 func (services *UserServicesImpl) Login(ctx context.Context, request web.LoginRequest) web.UserResponses {
+	// Get the pointer to the firestore client
 	client := services.Db
 
+	// Check if the provided username exists in the "users" collection
 	user, err := services.UserRepository.CheckUsername(ctx, client, request.Username)
 	if err != nil {
+		// Panic if the username is not registered
 		panic(exceptions.NewErrorUnprocessableEntity("username tidak terdaftar", "username"))
 	}
 
+	// Validate the provided password with the one stored in the user document
 	isValidPassword := utils.ValidatePassword(request.Password, user.Password)
 	if !isValidPassword {
+		// Panic if the passwords do not match
 		panic(exceptions.NewErrorUnprocessableEntity("password tidak valid", "password"))
 	}
 
+	// Convert the user data to the format of web.UserResponses and return the converted data
 	return web.ConvertToUserResponse(user)
 }
 
 func (services *UserServicesImpl) StoreSessionUser(ctx context.Context, request web.SessionRequest) {
+	// Get the pointer to the firestore client
 	client := services.Db
 
+	// Create a user struct with the NIK provided in the request
 	user := domain.User{
 		Nik: request.Nik,
 	}
 
+	// Create a session struct with the auth token and current timestamp provided in the request
 	session := domain.Session{
 		AuthToken: request.AuthToken,
 		CreatedAt: time.Now(),
 	}
 
+	// Store the session for the user in the "users" collection
 	services.UserRepository.StoreSessionUser(ctx, client, session, user)
 }
 
 func (services *UserServicesImpl) Logout(ctx context.Context, request web.SessionRequest) {
+	// Get the pointer to the firestore client
 	client := services.Db
 
+	// Create a user struct with the NIK provided in the request
 	user := domain.User{Nik: request.Nik}
 
+	// Get the current time
 	timeNow := time.Now()
+
+	// Create a session struct with the auth token and the current time as deleted at
 	session := domain.Session{
 		AuthToken: request.AuthToken,
 		DeletedAt: &timeNow,
 	}
 
+	// Delete the session for the user in the "users" collection
 	services.UserRepository.DeleteSessionUser(ctx, client, session, user)
 }
 

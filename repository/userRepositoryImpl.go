@@ -78,7 +78,7 @@ func (repository *UserRepositoryImpl) DeleteSessionUser(ctx context.Context, db 
 	// Initialize a variable to hold the session ID
 	var id string
 
-	// Get the iterator for the matching documents in the "sessions" subcollection where the auth token matches the one provided
+	// Get the iterator for the matching documents in the "sessions" sub collection where the auth token matches the one provided
 	iter := db.Collection("users").Doc(user.Nik).Collection("sessions").Where("auth_token", "==", session.AuthToken).Documents(ctx)
 
 	// Iterate through the documents
