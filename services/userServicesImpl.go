@@ -131,3 +131,21 @@ func (services *UserServicesImpl) GetUserProfile(ctx context.Context, nik string
 	// Convert the user data to the format of web.UserProfileResponses and return the converted data
 	return web.ConvertToUserProfileResponse(user)
 }
+
+func (services *UserServicesImpl) UpdateUserProfile(ctx context.Context, request web.UpdateUserProfileRequest) {
+	// Get the pointer to the firestore client
+	client := services.Db
+
+	// Create a user struct with the data from the request
+	user := domain.User{
+		Nik:     request.Nik,
+		Nama:    request.Nama,
+		Alamat:  &request.Alamat,
+		NoTelp:  &request.NoTelp,
+		Email:   &request.Email,
+		Jabatan: &request.Jabatan,
+	}
+
+	// Update the user's profile using the UserRepository struct
+	services.UserRepository.Update(ctx, client, user)
+}

@@ -7,4 +7,5 @@ type AuthControllers interface {
 	Login(ctx *fiber.Ctx) error
 	Logout(ctx *fiber.Ctx) error
 	GetUserProfile(ctx *fiber.Ctx) error
+	UpdateUserProfile(ctx *fiber.Ctx) error
 }

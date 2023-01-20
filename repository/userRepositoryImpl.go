@@ -34,6 +34,7 @@ func (repository *UserRepositoryImpl) Store(ctx context.Context, db *firestore.C
 		NoTelp:     user.NoTelp,
 		Email:      user.Email,
 		Foto:       user.Foto,
+		Jabatan:    user.Jabatan,
 	})
 	// Panic if there is an error during the set operation
 	utils.PanicIfError(err)
@@ -66,11 +67,14 @@ func (repository *UserRepositoryImpl) CheckUsername(ctx context.Context, db *fir
 }
 
 func (repository *UserRepositoryImpl) StoreSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User) {
+	// Store the session data in the sessions sub collection of the user's document in the "users" collection
 	_, _, err := db.Collection("users").Doc(user.Nik).Collection("sessions").Add(ctx, domain.Session{
 		AuthToken: session.AuthToken,
 		CreatedAt: session.CreatedAt,
 		DeletedAt: session.DeletedAt,
 	})
+
+	// Panic if there is an error
 	utils.PanicIfError(err)
 }
 
@@ -149,4 +153,32 @@ func (repository *UserRepositoryImpl) CheckDuplicateUsername(ctx context.Context
 	}
 
 	return nil
+}
+
+func (repository *UserRepositoryImpl) Update(ctx context.Context, db *firestore.Client, user domain.User) {
+	// Update the user's data in the "users" collection using the provided NIK
+	_, err := db.Collection("users").Doc(user.Nik).Update(ctx, []firestore.Update{
+		{
+			Path:  "nama",
+			Value: user.Nama,
+		},
+		{
+			Path:  "no_telp",
+			Value: user.NoTelp,
+		},
+		{
+			Path:  "email",
+			Value: user.Email,
+		},
+		{
+			Path:  "alamat",
+			Value: user.Alamat,
+		},
+		{
+			Path:  "jabatan",
+			Value: user.Jabatan,
+		},
+	})
+	// Panic if there is an error
+	utils.PanicIfError(err)
 }

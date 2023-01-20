@@ -10,5 +10,6 @@ type User struct {
 	Alamat     *string `firestore:"alamat"`
 	NoTelp     *string `firestore:"no_telp"`
 	Email      *string `firestore:"email"`
+	Jabatan    *string `firestore:"jabatan"`
 	Foto       *string `firestore:"foto"`
 }

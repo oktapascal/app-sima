@@ -18,6 +18,7 @@ func NewRouter(app *fiber.App,
 
 	authGroupWithMiddleware := authGroup.Group("/", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
 	authGroupWithMiddleware.Post("/logout", timeout.New(authControllers.Logout, 10*time.Second))
+	authGroupWithMiddleware.Post("/profile", timeout.New(authControllers.UpdateUserProfile, 10*time.Second))
 	authGroupWithMiddleware.Get("/profile", timeout.New(authControllers.GetUserProfile, 10*time.Second))
 
 	app.Use(func(ctx *fiber.Ctx) error {

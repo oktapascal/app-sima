@@ -8,6 +8,7 @@ import (
 
 type UserRepository interface {
 	Store(ctx context.Context, db *firestore.Client, user domain.User)
+	Update(ctx context.Context, db *firestore.Client, user domain.User)
 	CheckUsername(ctx context.Context, db *firestore.Client, username string) (domain.User, error)
 	CheckDuplicateUsername(ctx context.Context, db *firestore.Client, username string) error
 	StoreSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User)

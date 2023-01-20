@@ -154,3 +154,36 @@ func (controllers *AuthControllersImpl) GetUserProfile(ctx *fiber.Ctx) error {
 	// Return the JSON response with a 200 OK status
 	return ctx.Status(fiber.StatusOK).JSON(responses)
 }
+
+func (controllers *AuthControllersImpl) UpdateUserProfile(ctx *fiber.Ctx) error {
+	// Get the user context
+	cntx := ctx.UserContext()
+
+	// Parse the request body
+	request := new(web.UpdateUserProfileRequest)
+	err := ctx.BodyParser(request)
+	utils.PanicIfError(err)
+
+	// Validate the request
+	err = controllers.Validate.Struct(request)
+	utils.PanicIfError(err)
+
+	// Get the user's NIK from the JWT claims
+	locals := ctx.Locals("user")
+	exception, _ := locals.(*web.JwtClaims)
+
+	// Update the request's NIK field with the user's NIK from the JWT claims
+	request.Nik = exception.Nik
+
+	// Update the user's profile using the UserServices struct
+	controllers.UserServices.UpdateUserProfile(cntx, *request)
+
+	// Create a JSON response with a 200 OK status
+	responses := web.JsonResponses{
+		StatusCode:    fiber.StatusOK,
+		StatusMessage: "OK",
+	}
+
+	// Return the JSON response
+	return ctx.Status(fiber.StatusOK).JSON(responses)
+}
