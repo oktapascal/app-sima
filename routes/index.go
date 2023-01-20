@@ -18,13 +18,7 @@ func NewRouter(app *fiber.App,
 
 	authGroupWithMiddleware := authGroup.Group("/", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
 	authGroupWithMiddleware.Post("/logout", timeout.New(authControllers.Logout, 10*time.Second))
-
-	sessionApi := authGroup.Group("/session", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
-	sessionApi.Get("/user-access", authControllers.GetUserAccess)
-
-	//profileGroup := app.Group("/api/profile", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
-
-	//NewProfileRoutes(profileGroup, profileControllers)
+	authGroupWithMiddleware.Get("/profile", timeout.New(authControllers.GetUserProfile, 10*time.Second))
 
 	app.Use(func(ctx *fiber.Ctx) error {
 		if strings.HasPrefix(ctx.OriginalURL(), "/api") {

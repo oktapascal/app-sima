@@ -117,25 +117,17 @@ func (services *UserServicesImpl) Logout(ctx context.Context, request web.Sessio
 	services.UserRepository.DeleteSessionUser(ctx, client, session, user)
 }
 
-// GetSessionUser is a method on the *UserServicesImpl struct that retrieves a user from the database using a given authToken.
-// It takes in a context of type context.Context and an authToken of type string as input parameters.
-// It returns a web.UserResponses.
-func (services *UserServicesImpl) GetSessionUser(ctx context.Context, authToken string) web.UserResponses {
-	//// Begin a new transaction using the given context and the Db field of the *UserServicesImpl struct.
-	//tx := services.Db.WithContext(ctx).Begin()
-	//// Defer a call to the CommitRollback function, passing in the tx variable as an argument.
-	//defer utils.CommitRollback(tx)
-	//
-	//// Call the GetUserBySession method on the UserRepository field of the *UserServicesImpl struct,
-	//// passing in the context, tx, and authToken variables as arguments.
-	//// Assign the returned domain.User and error to user and err variables, respectively.
-	//user, err := services.UserRepository.GetUserBySession(ctx, tx, authToken)
-	//// If the error is not nil, panic with a new exceptions.NewErrorNotFound error that has the error message as its message.
-	//if err != nil {
-	//	panic(exceptions.NewErrorNotFound(err.Error()))
-	//}
-	//
-	//// Return the result of calling the ConvertToUserResponse function from the web package, passing in the user variable as an argument.
-	var user domain.User
-	return web.ConvertToUserResponse(user)
+func (services *UserServicesImpl) GetUserProfile(ctx context.Context, nik string) web.UserProfileResponses {
+	// Get the pointer to the firestore client
+	client := services.Db
+
+	// Get the user's profile from the "users" collection using the provided NIK
+	user, err := services.UserRepository.GetUserProfile(ctx, client, nik)
+	if err != nil {
+		// Panic if the user is not found
+		panic(exceptions.NewErrorNotFound(err.Error()))
+	}
+
+	// Convert the user data to the format of web.UserProfileResponses and return the converted data
+	return web.ConvertToUserProfileResponse(user)
 }

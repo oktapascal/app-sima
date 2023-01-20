@@ -10,5 +10,5 @@ type UserServices interface {
 	Login(ctx context.Context, request web.LoginRequest) web.UserResponses
 	Logout(ctx context.Context, request web.SessionRequest)
 	StoreSessionUser(ctx context.Context, request web.SessionRequest)
-	GetSessionUser(ctx context.Context, authToken string) web.UserResponses
+	GetUserProfile(ctx context.Context, nik string) web.UserProfileResponses
 }

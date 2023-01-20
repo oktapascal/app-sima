@@ -64,11 +64,7 @@ func main() {
 	userRepository := repository.NewUserRepositoryImpl()
 	userServices := services.NewUserServicesImpl(userRepository, fireStore)
 
-	//employeeRepository := repository.NewEmployeeRepositoryImpl()
-	//employeeServices := services.NewEmployeeServicesImpl(employeeRepository, mySql)
-
 	authControllers := controllers.NewAuthControllerImpl(validate, userServices, jwtConfig, cookiesConfig)
-	//profileControllers := controllers.NewProfileControllersImpl(validate, userServices, employeeServices)
 
 	routes.NewRouter(app, middlewareAuth, authControllers)
 

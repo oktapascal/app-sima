@@ -133,20 +133,24 @@ func (controllers *AuthControllersImpl) Logout(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(responses)
 }
 
-// GetUserAccess handles a request to get the current user's access information.
-func (controllers *AuthControllersImpl) GetUserAccess(ctx *fiber.Ctx) error {
-	// Get the user context and the current user's auth token.
+func (controllers *AuthControllersImpl) GetUserProfile(ctx *fiber.Ctx) error {
+	// Get the user context
 	cntx := ctx.UserContext()
-	authToken := ctx.Cookies(controllers.CookieConfig.GetCookieToken())
 
-	// Get the current user's session information.
-	user := controllers.UserServices.GetSessionUser(cntx, authToken)
+	// Get the user's NIK from the JWT claims
+	locals := ctx.Locals("user")
+	exception, _ := locals.(*web.JwtClaims)
 
-	// Construct and return a JSON response with status code 200 OK.
+	// Get the user's profile using the UserServices struct
+	user := controllers.UserServices.GetUserProfile(cntx, exception.Nik)
+
+	// Create a JSON response with the retrieved user profile
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
 		Data:          user,
 	}
+
+	// Return the JSON response with a 200 OK status
 	return ctx.Status(fiber.StatusOK).JSON(responses)
 }

@@ -94,68 +94,34 @@ func (repository *UserRepositoryImpl) DeleteSessionUser(ctx context.Context, db 
 	}
 
 	// Update the deleted_at field in the session document with the value provided
-	db.Collection("users").Doc(user.Nik).Collection("sessions").Doc(id).Update(ctx, []firestore.Update{
+	_, err := db.Collection("users").Doc(user.Nik).Collection("sessions").Doc(id).Update(ctx, []firestore.Update{
 		{
 			Path:  "deleted_at",
 			Value: session.DeletedAt,
 		},
 	})
+	utils.PanicIfError(err)
 }
 
-// GetUserBySession is a method on the *UserRepositoryImpl struct that retrieves a domain.User from the database using a given authToken.
-// It takes in a ctx of type context.Context, a db of type *firestore.Client, and an authToken of type string as input parameters.
-// It returns a domain.User and an error.
-func (repository *UserRepositoryImpl) GetUserBySession(ctx context.Context, db *firestore.Client, authToken string) (domain.User, error) {
-	// Initialize an empty domain.User variable
+func (repository *UserRepositoryImpl) GetUserProfile(ctx context.Context, db *firestore.Client, nik string) (domain.User, error) {
+	// Initialize a variable to hold the user data
 	var user domain.User
 
-	// Create a row variable using a firestore.Client method called Table, which allows you to specify the table name to be used in the query.
-	// Call the Select method on row, which specifies the columns that should be returned in the query.
-	// Call the Joins method on row multiple times, each time specifying an inner join with a different table.
-	// Call the Where method on row, which specifies a condition for the query. Pass in the authToken input parameter as the condition.
-	//row := db.Table("user").Select("user.id, user.role, karyawan.kode_lokasi").
-	//	Joins("inner join karyawan on user.id=karyawan.id_user").
-	//	Joins("inner join session on user.id=session.id_user").
-	//	Where("session.auth_token = ?", authToken).Row()
+	// Get the user document from the "users" collection using the provided NIK
+	document, err := db.Collection("users").Doc(nik).Get(ctx)
+	utils.PanicIfError(err)
 
-	// Check if the Err method of row returns gorm.ErrRecordNotFound.
-	// If it does, return the empty user variable and a new errors.New error with the message "authentication token invalid".
-	//if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
-	//	return user, errors.New("authentication token invalid")
-	//}
+	// Check if the document exists
+	if !document.Exists() {
+		// Return an error if the document does not exist
+		return user, errors.New("user tidak ditemukan")
+	}
 
-	// If the Err method of row does not return gorm.ErrRecordNotFound, call the Scan method on row,
-	// passing in pointers to the fields of the user variable as arguments.
-	// If the Scan method returns an error, call the PanicIfError function from the utils package and pass in the error as an argument.
-	//err := row.Scan(&user.Id, &user.Role, &user.Karyawan.KodeLokasi)
-	//if err != nil {
-	//	utils.PanicIfError(err)
-	//}
+	// Convert the document data to the user struct
+	err = document.DataTo(&user)
+	utils.PanicIfError(err)
 
-	// Return the user variable and a nil error.
-	return user, nil
-}
-
-// GetUserProfile retrieves a user's profile information from the database using the given IdUser.
-// It returns a domain.User value and an error.
-func (repository *UserRepositoryImpl) GetUserProfile(ctx context.Context, db *firestore.Client, IdUser uint) (domain.User, error) {
-	var user domain.User
-
-	//row := db.Table("user as a").Select("a.id, a.username, a.role, b.kode_lokasi, b.foto, b.email, b.no_telp, b.alamat, b.nama, b.nik").
-	//	InnerJoins("inner join karyawan as b on a.id=b.id_user").
-	//	Where("a.id = ?", strconv.FormatUint(uint64(IdUser), 10)).Row()
-	//
-	//if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
-	//	return user, errors.New("user not found")
-	//}
-	//
-	//err := row.Scan(&user.Id, &user.Username, &user.Role, &user.Karyawan.KodeLokasi, &user.Karyawan.Foto, &user.Karyawan.Email,
-	//	&user.Karyawan.NoTelp, &user.Karyawan.Alamat, &user.Karyawan.Nama, &user.Karyawan.Nik)
-	//
-	//if err != nil {
-	//	utils.PanicIfError(err)
-	//}
-
+	// Return the user struct and a nil error
 	return user, nil
 }
 

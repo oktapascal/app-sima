@@ -6,5 +6,5 @@ type AuthControllers interface {
 	Register(ctx *fiber.Ctx) error
 	Login(ctx *fiber.Ctx) error
 	Logout(ctx *fiber.Ctx) error
-	GetUserAccess(ctx *fiber.Ctx) error
+	GetUserProfile(ctx *fiber.Ctx) error
 }

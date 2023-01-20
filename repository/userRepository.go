@@ -12,6 +12,5 @@ type UserRepository interface {
 	CheckDuplicateUsername(ctx context.Context, db *firestore.Client, username string) error
 	StoreSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User)
 	DeleteSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User)
-	GetUserBySession(ctx context.Context, db *firestore.Client, authToken string) (domain.User, error)
-	GetUserProfile(ctx context.Context, db *firestore.Client, IdUser uint) (domain.User, error)
+	GetUserProfile(ctx context.Context, db *firestore.Client, nik string) (domain.User, error)
 }
