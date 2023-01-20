@@ -1,4 +1,4 @@
-module github.com/oktapascal/app-barayya
+module github.com/oktapascal/app-sima
 
 go 1.19
 

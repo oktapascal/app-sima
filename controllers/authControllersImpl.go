@@ -3,11 +3,11 @@ package controllers
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/oktapascal/app-barayya/bootstraps"
-	"github.com/oktapascal/app-barayya/exceptions"
-	"github.com/oktapascal/app-barayya/models/web"
-	"github.com/oktapascal/app-barayya/services"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/bootstraps"
+	"github.com/oktapascal/app-sima/exceptions"
+	"github.com/oktapascal/app-sima/models/web"
+	"github.com/oktapascal/app-sima/services"
+	"github.com/oktapascal/app-sima/utils"
 )
 
 // AuthControllersImpl is a struct that represents a controller for handling authentication-related actions.

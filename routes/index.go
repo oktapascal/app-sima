@@ -3,9 +3,9 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/timeout"
-	"github.com/oktapascal/app-barayya/controllers"
-	"github.com/oktapascal/app-barayya/middleware"
-	"github.com/oktapascal/app-barayya/models/web"
+	"github.com/oktapascal/app-sima/controllers"
+	"github.com/oktapascal/app-sima/middleware"
+	"github.com/oktapascal/app-sima/models/web"
 	"strings"
 	"time"
 )

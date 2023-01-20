@@ -2,7 +2,7 @@ package bootstraps
 
 import (
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/oktapascal/app-barayya/models/web"
+	"github.com/oktapascal/app-sima/models/web"
 	"time"
 )
 

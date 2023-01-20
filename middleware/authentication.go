@@ -3,8 +3,8 @@ package middleware
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/oktapascal/app-barayya/bootstraps"
-	"github.com/oktapascal/app-barayya/models/web"
+	"github.com/oktapascal/app-sima/bootstraps"
+	"github.com/oktapascal/app-sima/models/web"
 )
 
 // Authentication is an interface that defines methods for handling

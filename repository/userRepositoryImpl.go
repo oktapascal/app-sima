@@ -4,8 +4,8 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"errors"
-	"github.com/oktapascal/app-barayya/models/domain"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/models/domain"
+	"github.com/oktapascal/app-sima/utils"
 	"google.golang.org/api/iterator"
 	"reflect"
 )

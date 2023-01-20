@@ -1,6 +1,6 @@
 package web
 
-import "github.com/oktapascal/app-barayya/models/domain"
+import "github.com/oktapascal/app-sima/models/domain"
 
 type UserResponses struct {
 	Nik        string `json:"nik"`

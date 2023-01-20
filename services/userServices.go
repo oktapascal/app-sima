@@ -2,7 +2,7 @@ package services
 
 import (
 	"context"
-	"github.com/oktapascal/app-barayya/models/web"
+	"github.com/oktapascal/app-sima/models/web"
 )
 
 type UserServices interface {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"github.com/oktapascal/app-barayya/models/web"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/models/web"
+	"github.com/oktapascal/app-sima/utils"
 )
 
 // ErrorHandler handles different types of errors that may occur during the

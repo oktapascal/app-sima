@@ -3,8 +3,8 @@ package database
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"github.com/oktapascal/app-barayya/bootstraps"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/bootstraps"
+	"github.com/oktapascal/app-sima/utils"
 )
 
 func NewFirestoreClient(config bootstraps.Config, ctx context.Context) *firestore.Client {

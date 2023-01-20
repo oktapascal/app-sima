@@ -3,11 +3,11 @@ package services
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"github.com/oktapascal/app-barayya/exceptions"
-	"github.com/oktapascal/app-barayya/models/domain"
-	"github.com/oktapascal/app-barayya/models/web"
-	"github.com/oktapascal/app-barayya/repository"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/exceptions"
+	"github.com/oktapascal/app-sima/models/domain"
+	"github.com/oktapascal/app-sima/models/web"
+	"github.com/oktapascal/app-sima/repository"
+	"github.com/oktapascal/app-sima/utils"
 	"time"
 )
 

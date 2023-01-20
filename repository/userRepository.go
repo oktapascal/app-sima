@@ -3,7 +3,7 @@ package repository
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"github.com/oktapascal/app-barayya/models/domain"
+	"github.com/oktapascal/app-sima/models/domain"
 )
 
 type UserRepository interface {

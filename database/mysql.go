@@ -2,8 +2,8 @@ package database
 
 import (
 	"fmt"
-	"github.com/oktapascal/app-barayya/bootstraps"
-	"github.com/oktapascal/app-barayya/utils"
+	"github.com/oktapascal/app-sima/bootstraps"
+	"github.com/oktapascal/app-sima/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
