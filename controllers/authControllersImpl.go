@@ -52,7 +52,8 @@ func (controllers *AuthControllersImpl) Register(ctx *fiber.Ctx) error {
 
 	// Save the request to storage.
 	cntx := ctx.UserContext()
-	controllers.UserServices.Save(cntx, *request)
+
+	controllers.UserServices.Register(cntx, *request)
 
 	// Construct and return a JSON response with status code 200 OK.
 	responses := web.JsonResponses{
@@ -76,28 +77,22 @@ func (controllers *AuthControllersImpl) Login(ctx *fiber.Ctx) error {
 
 	// Check if the provided username is valid.
 	cntx := ctx.UserContext()
-	user := controllers.UserServices.CheckUsername(cntx, request.Username)
-
-	// Validate the provided password.
-	isValidPassword := utils.ValidatePassword(request.Password, user.Password)
-	if !isValidPassword {
-		// If the password is invalid, raise an error.
-		panic(exceptions.NewErrorUnprocessableEntity("Password tidak valid", "password"))
-	}
+	user := controllers.UserServices.Login(cntx, *request)
 
 	// Generate an access token and expiration date.
-	token, expiration, err := controllers.JwtConfig.GenerateAccessToken(user)
-	if err != nil {
+	token, expiration, errGenerate := controllers.JwtConfig.GenerateAccessToken(user)
+	if errGenerate != nil {
 		// If there is an error generating the token, raise an error.
 		panic(exceptions.NewErrorUnauthorized("token is incorrect"))
 	}
 
 	// Save the session information.
-	var session web.SessionRequest
-	session.AuthToken = token
-	session.IdUser = user.Id
-	controllers.UserServices.SaveSessionUser(cntx, session)
-	userSession := controllers.UserServices.GetSessionUser(cntx, token)
+	session := web.SessionRequest{
+		Nik:       user.Nik,
+		AuthToken: token,
+	}
+
+	controllers.UserServices.StoreSessionUser(cntx, session)
 
 	// Create a token cookie.
 	controllers.CookieConfig.CreateTokenAndCookie(token, expiration, ctx)
@@ -106,8 +101,8 @@ func (controllers *AuthControllersImpl) Login(ctx *fiber.Ctx) error {
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
-		Data:          userSession,
 	}
+
 	return ctx.Status(fiber.StatusOK).JSON(responses)
 }
 
@@ -117,8 +112,15 @@ func (controllers *AuthControllersImpl) Logout(ctx *fiber.Ctx) error {
 	cntx := ctx.UserContext()
 	authToken := ctx.Cookies(controllers.CookieConfig.GetCookieToken())
 
+	locals := ctx.Locals("user")
+	exception, _ := locals.(*web.JwtClaims)
+
+	session := web.SessionRequest{
+		Nik:       exception.Nik,
+		AuthToken: authToken,
+	}
 	// Destroy the current user's session.
-	controllers.UserServices.DestroySessionUser(cntx, authToken)
+	controllers.UserServices.Logout(cntx, session)
 
 	// Delete the auth token cookie.
 	controllers.CookieConfig.DeleteCookie(ctx)
@@ -127,7 +129,6 @@ func (controllers *AuthControllersImpl) Logout(ctx *fiber.Ctx) error {
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
-		Data:          nil,
 	}
 	return ctx.Status(fiber.StatusOK).JSON(responses)
 }

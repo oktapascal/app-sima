@@ -1,10 +1,14 @@
 package domain
 
 type User struct {
-	Id       uint `gorm:"primaryKey;autoIncrement"`
-	Username string
-	Password string
-	Role     string
-	Karyawan Karyawan  `gorm:"foreignKey:IdUser;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
-	Session  []Session `gorm:"foreignKey:IdUser;references:Id;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
+	Username   string  `firestore:"username"`
+	Password   string  `firestore:"password"`
+	Role       string  `firestore:"role"`
+	KodeLokasi string  `firestore:"kode_lokasi"`
+	Nik        string  `firestore:"nik"`
+	Nama       string  `firestore:"nama"`
+	Alamat     *string `firestore:"alamat"`
+	NoTelp     *string `firestore:"no_telp"`
+	Email      *string `firestore:"email"`
+	Foto       *string `firestore:"foto"`
 }

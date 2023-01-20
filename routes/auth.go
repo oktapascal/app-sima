@@ -14,5 +14,4 @@ func NewAuthRoutes(router fiber.Router, authControllers controllers.AuthControll
 
 	router.Post("/register", timeout.New(authControllers.Register, 10*time.Second))
 	router.Post("/login", timeout.New(authControllers.Login, 10*time.Second))
-	router.Post("/logout", timeout.New(authControllers.Logout, 10*time.Second))
 }

@@ -6,10 +6,9 @@ import (
 )
 
 type UserServices interface {
-	Save(ctx context.Context, request web.RegisterRequest)
-	CheckUsername(ctx context.Context, username string) web.UserResponses
-	SaveSessionUser(ctx context.Context, request web.SessionRequest)
-	DestroySessionUser(ctx context.Context, authToken string)
+	Register(ctx context.Context, request web.RegisterRequest)
+	Login(ctx context.Context, request web.LoginRequest) web.UserResponses
+	Logout(ctx context.Context, request web.SessionRequest)
+	StoreSessionUser(ctx context.Context, request web.SessionRequest)
 	GetSessionUser(ctx context.Context, authToken string) web.UserResponses
-	GetUserProfile(ctx context.Context, IdUser uint) web.UserProfileResponses
 }

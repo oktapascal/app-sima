@@ -3,7 +3,6 @@ package database
 import (
 	"fmt"
 	"github.com/oktapascal/app-barayya/bootstraps"
-	"github.com/oktapascal/app-barayya/models/domain"
 	"github.com/oktapascal/app-barayya/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -60,8 +59,8 @@ func NewMysql(config bootstraps.Config) *gorm.DB {
 	mysqlDb.SetConnMaxLifetime(15 * time.Minute)
 
 	// Perform an automatic migration of certain structs to the MySQL database.
-	err = db.AutoMigrate(&domain.User{}, &domain.Karyawan{}, &domain.Session{})
-	utils.PanicIfError(err)
+	//err = db.AutoMigrate(&domain.User{}, &domain.Karyawan{}, &domain.Session{})
+	//utils.PanicIfError(err)
 
 	return db
 }

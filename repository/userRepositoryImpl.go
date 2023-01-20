@@ -1,14 +1,13 @@
 package repository
 
 import (
+	"cloud.google.com/go/firestore"
 	"context"
-	"database/sql"
 	"errors"
 	"github.com/oktapascal/app-barayya/models/domain"
 	"github.com/oktapascal/app-barayya/utils"
-	"gorm.io/gorm"
-	"strconv"
-	"time"
+	"google.golang.org/api/iterator"
+	"reflect"
 )
 
 // UserRepositoryImpl is a struct that implements the UserRepository interface.
@@ -22,111 +21,116 @@ func NewUserRepositoryImpl() *UserRepositoryImpl {
 	return &UserRepositoryImpl{}
 }
 
-// Store is a method in the UserRepository interface that is responsible for saving user data to the database.
-// It accepts 4 parameters:
-// - ctx: the context used to manage the request.
-// - db: the *gorm.DB object used to execute queries on the database.
-// - user: a domain.User object containing the user data to be saved.
-func (repository *UserRepositoryImpl) Store(ctx context.Context, db *gorm.DB, user domain.User) {
-	// Insert user data into the 'user' table.
-	db.Create(&domain.User{
-		Username: user.Username,
-		Password: user.Password,
-		Role:     user.Role,
+func (repository *UserRepositoryImpl) Store(ctx context.Context, db *firestore.Client, user domain.User) {
+	// Set the data from the user struct in the "users" collection, using the user's NIK as the document ID
+	_, err := db.Collection("users").Doc(user.Nik).Set(ctx, domain.User{
+		Username:   user.Username,
+		Password:   user.Password,
+		Role:       user.Role,
+		KodeLokasi: user.KodeLokasi,
+		Nik:        user.Nik,
+		Nama:       user.Nama,
+		Alamat:     user.Alamat,
+		NoTelp:     user.NoTelp,
+		Email:      user.Email,
+		Foto:       user.Foto,
 	})
-
-	// Retrieve the latest ID inserted into the 'user' table.
-	var idUser uint
-	row := db.Table("user").Select("id").Order("id desc").Limit(1).Row()
-	_ = row.Scan(&idUser)
-
-	// Create a 'karyawan' object using the newly acquired user ID and the location code from the 'user' object.
-	karyawan := domain.Karyawan{
-		IdUser:     idUser,
-		KodeLokasi: user.Karyawan.KodeLokasi,
-	}
-
-	// Insert the 'karyawan' object into the 'karyawan' table.
-	db.Create(&karyawan)
+	// Panic if there is an error during the set operation
+	utils.PanicIfError(err)
 }
 
-// CheckUsername is a method in the UserRepository interface that is responsible for checking if a given username is registered in the database.
-// It accepts 3 parameters:
-// - ctx: the context used to manage the request.
-// - db: the *gorm.DB object used to execute queries on the database.
-// - username: a string containing the username to be checked.
-func (repository *UserRepositoryImpl) CheckUsername(ctx context.Context, db *gorm.DB, username string) (domain.User, error) {
+func (repository *UserRepositoryImpl) CheckUsername(ctx context.Context, db *firestore.Client, username string) (domain.User, error) {
+	//Create an empty user variable
 	var user domain.User
 
-	// Execute a SELECT query with an inner join on the 'karyawan' table to retrieve user data with the specified username.
-	row := db.Table("user").Select("user.id, user.password, user.role, karyawan.kode_lokasi").
-		Joins("inner join karyawan on user.id=karyawan.id_user").
-		Where("user.username = ?", username).Row()
+	//Query the "users" collection for documents where the "username" field is equal to the provided "username" string
+	iter := db.Collection("users").Where("username", "==", username).Documents(ctx)
 
-	err := row.Scan(&user.Id, &user.Password, &user.Role, &user.Karyawan.KodeLokasi)
-
-	// If no data is found, return an error with the message "username not registered".
-	if errors.Is(err, sql.ErrNoRows) {
-		return user, errors.New("username tidak terdaftar")
+	//Iterate through the returned documents
+	for {
+		document, err := iter.Next()
+		//Break the loop if no more documents are returned
+		if err == iterator.Done {
+			break
+		}
+		//Populate the user variable with the data from the document
+		_ = document.DataTo(&user)
 	}
 
-	// Return the user data and a nil error if data is found.
+	//Check if the user variable is zero value, indicating that the username does not exist
+	if reflect.ValueOf(user).IsZero() {
+		return user, errors.New("username tidak terdaftar")
+	}
+	//Return the user if it is not zero value
 	return user, nil
 }
 
-// StoreSessionUser is a method in the UserRepository interface that is responsible for saving user session data to the database.
-// It accepts 3 parameters:
-// - ctx: the context used to manage the request.
-// - db: the *gorm.DB object used to execute queries on the database.
-// - session: a domain.Session object containing the user session data to be saved.
-func (repository *UserRepositoryImpl) StoreSessionUser(ctx context.Context, db *gorm.DB, session domain.Session) {
-	// Insert user session data into the 'session' table.
-	db.Create(&domain.Session{
-		IdUser:    session.IdUser,
+func (repository *UserRepositoryImpl) StoreSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User) {
+	_, _, err := db.Collection("users").Doc(user.Nik).Collection("sessions").Add(ctx, domain.Session{
 		AuthToken: session.AuthToken,
-		CreatedAt: time.Now(),
+		CreatedAt: session.CreatedAt,
+		DeletedAt: session.DeletedAt,
+	})
+	utils.PanicIfError(err)
+}
+
+func (repository *UserRepositoryImpl) DeleteSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User) {
+	// Initialize a variable to hold the session ID
+	var id string
+
+	// Get the iterator for the matching documents in the "sessions" subcollection where the auth token matches the one provided
+	iter := db.Collection("users").Doc(user.Nik).Collection("sessions").Where("auth_token", "==", session.AuthToken).Documents(ctx)
+
+	// Iterate through the documents
+	for {
+		document, err := iter.Next()
+		if err == iterator.Done {
+			// Break the loop if there are no more documents
+			break
+		}
+
+		// Get the ID of the session document
+		id = document.Ref.ID
+	}
+
+	// Update the deleted_at field in the session document with the value provided
+	db.Collection("users").Doc(user.Nik).Collection("sessions").Doc(id).Update(ctx, []firestore.Update{
+		{
+			Path:  "deleted_at",
+			Value: session.DeletedAt,
+		},
 	})
 }
 
-// DeleteSessionUser is a method in the UserRepository interface that is responsible for deleting user session data from the database.
-// It accepts 3 parameters:
-// - ctx: the context used to manage the request.
-// - db: the *gorm.DB object used to execute queries on the database.
-// - authToken: a string containing the authentication token of the user session to be deleted.
-func (repository *UserRepositoryImpl) DeleteSessionUser(ctx context.Context, db *gorm.DB, authToken string) {
-	// Set the 'deleted_at' field of the user session with the specified authentication token to the current time.
-	db.Model(&domain.Session{}).Where("auth_token = ?", authToken).Update("deleted_at", time.Now())
-}
-
 // GetUserBySession is a method on the *UserRepositoryImpl struct that retrieves a domain.User from the database using a given authToken.
-// It takes in a ctx of type context.Context, a db of type *gorm.DB, and an authToken of type string as input parameters.
+// It takes in a ctx of type context.Context, a db of type *firestore.Client, and an authToken of type string as input parameters.
 // It returns a domain.User and an error.
-func (repository *UserRepositoryImpl) GetUserBySession(ctx context.Context, db *gorm.DB, authToken string) (domain.User, error) {
+func (repository *UserRepositoryImpl) GetUserBySession(ctx context.Context, db *firestore.Client, authToken string) (domain.User, error) {
 	// Initialize an empty domain.User variable
 	var user domain.User
 
-	// Create a row variable using a gorm.DB method called Table, which allows you to specify the table name to be used in the query.
+	// Create a row variable using a firestore.Client method called Table, which allows you to specify the table name to be used in the query.
 	// Call the Select method on row, which specifies the columns that should be returned in the query.
 	// Call the Joins method on row multiple times, each time specifying an inner join with a different table.
 	// Call the Where method on row, which specifies a condition for the query. Pass in the authToken input parameter as the condition.
-	row := db.Table("user").Select("user.id, user.role, karyawan.kode_lokasi").
-		Joins("inner join karyawan on user.id=karyawan.id_user").
-		Joins("inner join session on user.id=session.id_user").
-		Where("session.auth_token = ?", authToken).Row()
+	//row := db.Table("user").Select("user.id, user.role, karyawan.kode_lokasi").
+	//	Joins("inner join karyawan on user.id=karyawan.id_user").
+	//	Joins("inner join session on user.id=session.id_user").
+	//	Where("session.auth_token = ?", authToken).Row()
 
 	// Check if the Err method of row returns gorm.ErrRecordNotFound.
 	// If it does, return the empty user variable and a new errors.New error with the message "authentication token invalid".
-	if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
-		return user, errors.New("authentication token invalid")
-	}
+	//if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
+	//	return user, errors.New("authentication token invalid")
+	//}
 
 	// If the Err method of row does not return gorm.ErrRecordNotFound, call the Scan method on row,
 	// passing in pointers to the fields of the user variable as arguments.
 	// If the Scan method returns an error, call the PanicIfError function from the utils package and pass in the error as an argument.
-	err := row.Scan(&user.Id, &user.Role, &user.Karyawan.KodeLokasi)
-	if err != nil {
-		utils.PanicIfError(err)
-	}
+	//err := row.Scan(&user.Id, &user.Role, &user.Karyawan.KodeLokasi)
+	//if err != nil {
+	//	utils.PanicIfError(err)
+	//}
 
 	// Return the user variable and a nil error.
 	return user, nil
@@ -134,23 +138,49 @@ func (repository *UserRepositoryImpl) GetUserBySession(ctx context.Context, db *
 
 // GetUserProfile retrieves a user's profile information from the database using the given IdUser.
 // It returns a domain.User value and an error.
-func (repository *UserRepositoryImpl) GetUserProfile(ctx context.Context, db *gorm.DB, IdUser uint) (domain.User, error) {
+func (repository *UserRepositoryImpl) GetUserProfile(ctx context.Context, db *firestore.Client, IdUser uint) (domain.User, error) {
 	var user domain.User
 
-	row := db.Table("user as a").Select("a.id, a.username, a.role, b.kode_lokasi, b.foto, b.email, b.no_telp, b.alamat, b.nama, b.nik").
-		InnerJoins("inner join karyawan as b on a.id=b.id_user").
-		Where("a.id = ?", strconv.FormatUint(uint64(IdUser), 10)).Row()
-
-	if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
-		return user, errors.New("user not found")
-	}
-
-	err := row.Scan(&user.Id, &user.Username, &user.Role, &user.Karyawan.KodeLokasi, &user.Karyawan.Foto, &user.Karyawan.Email,
-		&user.Karyawan.NoTelp, &user.Karyawan.Alamat, &user.Karyawan.Nama, &user.Karyawan.Nik)
-
-	if err != nil {
-		utils.PanicIfError(err)
-	}
+	//row := db.Table("user as a").Select("a.id, a.username, a.role, b.kode_lokasi, b.foto, b.email, b.no_telp, b.alamat, b.nama, b.nik").
+	//	InnerJoins("inner join karyawan as b on a.id=b.id_user").
+	//	Where("a.id = ?", strconv.FormatUint(uint64(IdUser), 10)).Row()
+	//
+	//if errors.Is(row.Err(), gorm.ErrRecordNotFound) {
+	//	return user, errors.New("user not found")
+	//}
+	//
+	//err := row.Scan(&user.Id, &user.Username, &user.Role, &user.Karyawan.KodeLokasi, &user.Karyawan.Foto, &user.Karyawan.Email,
+	//	&user.Karyawan.NoTelp, &user.Karyawan.Alamat, &user.Karyawan.Nama, &user.Karyawan.Nik)
+	//
+	//if err != nil {
+	//	utils.PanicIfError(err)
+	//}
 
 	return user, nil
+}
+
+func (repository *UserRepositoryImpl) CheckDuplicateUsername(ctx context.Context, db *firestore.Client, username string) error {
+	//Create an empty user variable
+	var user domain.User
+
+	//Query the "users" collection for documents where the "username" field is equal to the provided "username" string
+	iter := db.Collection("users").Where("username", "==", username).Documents(ctx)
+
+	//Iterate through the returned documents
+	for {
+		document, err := iter.Next()
+		//Break the loop if no more documents are returned
+		if err == iterator.Done {
+			break
+		}
+		//Populate the user variable with the data from the document
+		_ = document.DataTo(&user)
+	}
+
+	//Check if the user variable is not zero value, indicating that the username does is exist
+	if !reflect.ValueOf(user).IsZero() {
+		return errors.New("username sudah terdaftar")
+	}
+
+	return nil
 }

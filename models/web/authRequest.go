@@ -5,6 +5,8 @@ type RegisterRequest struct {
 	Password   string `json:"password" validate:"required"`
 	Role       string `json:"role" validate:"required"`
 	KodeLokasi string `json:"kode_lokasi" validate:"required"`
+	Nik        string `json:"nik" validate:"required"`
+	Nama       string `json:"nama" validate:"required"`
 }
 
 type LoginRequest struct {
@@ -13,6 +15,6 @@ type LoginRequest struct {
 }
 
 type SessionRequest struct {
-	IdUser    uint
+	Nik       string
 	AuthToken string
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -23,11 +24,14 @@ func main() {
 	jwtConfig := bootstraps.NewJwtImpl(config)
 	cookiesConfig := bootstraps.NewCookieImpl(config)
 
-	mySql := database.NewMysql(config)
-
 	app := fiber.New(fiber.Config{
 		ErrorHandler: exceptions.ErrorHandler,
 	})
+
+	//mySql := database.NewMysql(config)
+
+	ctx := context.Background()
+	fireStore := database.NewFirestoreClient(config, ctx)
 
 	validate := validator.New()
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
@@ -58,15 +62,15 @@ func main() {
 	//}))
 
 	userRepository := repository.NewUserRepositoryImpl()
-	userServices := services.NewUserServicesImpl(userRepository, mySql)
+	userServices := services.NewUserServicesImpl(userRepository, fireStore)
 
-	karyawanRepository := repository.NewKaryawanRepositoryImpl()
-	karyawanServices := services.NewKaryawanServicesImpl(karyawanRepository, mySql)
+	//employeeRepository := repository.NewEmployeeRepositoryImpl()
+	//employeeServices := services.NewEmployeeServicesImpl(employeeRepository, mySql)
 
 	authControllers := controllers.NewAuthControllerImpl(validate, userServices, jwtConfig, cookiesConfig)
-	profileControllers := controllers.NewProfileControllersImpl(validate, userServices, karyawanServices)
+	//profileControllers := controllers.NewProfileControllersImpl(validate, userServices, employeeServices)
 
-	routes.NewRouter(app, middlewareAuth, authControllers, profileControllers)
+	routes.NewRouter(app, middlewareAuth, authControllers)
 
 	// load static files
 	app.Static("/", "./ui/dist")
