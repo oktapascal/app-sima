@@ -1,1 +1,0 @@
-export {default as WebNavbar} from "./WebNavbar.vue";

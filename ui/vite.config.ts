@@ -1,11 +1,10 @@
-import {fileURLToPath, URL} from "node:url";
-
 import {defineConfig} from "vite";
-import vue from "@vitejs/plugin-vue";
+import {svelte} from "@sveltejs/vite-plugin-svelte";
+import {fileURLToPath, URL} from "node:url";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [svelte()],
     resolve: {
         alias: {
             "@": fileURLToPath(new URL("./src", import.meta.url)),
@@ -14,12 +13,5 @@ export default defineConfig({
     build: {
         assetsDir: "static",
     },
-    server: {
-        proxy: {
-            "/api": {
-                target: "http://localhost:8080",
-                changeOrigin: true,
-            },
-        },
-    },
+    optimizeDeps: {exclude: ["svelte-navigator"]},
 });

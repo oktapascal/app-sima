@@ -101,6 +101,7 @@ func (controllers *AuthControllersImpl) Login(ctx *fiber.Ctx) error {
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
+		Data:          user,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(responses)

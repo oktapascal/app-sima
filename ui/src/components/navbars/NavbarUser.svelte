@@ -1,0 +1,28 @@
+<script lang="ts">
+    import {IconMenu, IconMenuOpen, WebNavbar} from "@/components";
+
+    let isOpen: boolean = false;
+
+    function onToggleMenu() {
+        isOpen = !isOpen;
+    }
+</script>
+
+<div class="flex-1">
+    <div class="flex flex-wrap">
+        <div>
+            <button type="button"
+                    class="border border-gray-300 rounded-lg p-2.5 mr-2 lg:mr-0 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    on:click={onToggleMenu}>
+                {#if isOpen}
+                    <IconMenuOpen className="w-7 h-7 text-gray-500 dark:text-white"/>
+                {:else }
+                    <IconMenu className="w-7 h-7 text-gray-500 dark:text-white"/>
+                {/if}
+            </button>
+        </div>
+    </div>
+</div>
+<div class="flex-none">
+    <WebNavbar/>
+</div>

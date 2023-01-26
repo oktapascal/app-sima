@@ -1,29 +1,23 @@
-export {default as NavbarBase} from "./NavbarBase.vue";
-export {default as NavbarGuest} from "./NavbarGuest.vue";
-export {default as NavbarProtected} from "./NavbarProtected.vue";
-export {default as Notification} from "./Notification.vue";
-export {WebNavbar} from "./Web";
-export {MobileNavbar, MobileProfile, MobileProfileBox} from "./Mobile";
-export {InputAppend, InputDefault} from "./Input";
 export {
-    IconAlert,
-    IconAlertBox,
-    IconAlertCircle,
-    IconBell,
-    IconCamera,
-    IconCheckCircle,
-    IconCloseCircle,
-    IconCog,
-    IconEye,
-    IconEyeOff,
-    IconLogout,
-    IconMenu,
-    IconMenuOpen,
     IconMoon,
     IconSun,
-    IconWindowClose,
-} from "./Icon";
-export {ConfigApp, ConfigBox} from "./Config";
-export {ButtonAlert, ButtonDefault} from "./Button";
-export {BoxDefault} from "./Box";
-export {AlertDefault} from "./Alert";
+    IconEyeOff,
+    IconEye,
+    IconAlertCircle,
+    IconCheckCircle,
+    IconAlertBox,
+    IconAlert,
+    IconMenu,
+    IconMenuOpen,
+    IconCog,
+    IconBell,
+    IconLogout,
+} from "./icons";
+export {BoxDefault} from "./box";
+export {InputDefault, InputGroup} from "./inputs";
+export {ButtonDefault} from "./buttons";
+export {AlertDefault} from "./alerts";
+export {Loading, LoadingPage} from "./loadings";
+export {NavbarBase, NavbarUser, NavbarGuest} from "./navbars";
+export {Notification, Config, SignOut} from "./others";
+export {WebNavbar} from "./webs";

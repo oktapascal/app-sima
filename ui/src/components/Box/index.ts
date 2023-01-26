@@ -1,1 +1,3 @@
-export {default as BoxDefault} from "./BoxDefault.vue";
+import BoxDefault from "./BoxDefault.svelte";
+
+export {BoxDefault};

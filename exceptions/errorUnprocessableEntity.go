@@ -1,8 +1,8 @@
 package exceptions
 
 type ErrorUnprocessableEntity struct {
-	ErrorMessage string
-	Param        string
+	ErrorMessage string `json:"error_message"`
+	Param        string `json:"param"`
 }
 
 func (err ErrorUnprocessableEntity) Error() string {
