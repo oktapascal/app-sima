@@ -12,6 +12,7 @@ export {
     IconCog,
     IconBell,
     IconLogout,
+    IconWindowClose,
 } from "./icons";
 export {BoxDefault} from "./box";
 export {InputDefault, InputGroup} from "./inputs";
@@ -21,3 +22,4 @@ export {Loading, LoadingPage} from "./loadings";
 export {NavbarBase, NavbarUser, NavbarGuest} from "./navbars";
 export {Notification, Config, SignOut} from "./others";
 export {WebNavbar} from "./webs";
+export {MobileNavbar, MobileProfile, MobileProfileBox} from "./mobiles";

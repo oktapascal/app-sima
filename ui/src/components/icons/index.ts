@@ -11,6 +11,7 @@ import IconMenuOpen from "./IconMenuOpen.svelte";
 import IconBell from "./IconBell.svelte";
 import IconCog from "./IconCog.svelte";
 import IconLogout from "./IconLogout.svelte";
+import IconWindowClose from "./IconWindowClose.svelte";
 
 export {
     IconMoon,
@@ -26,4 +27,5 @@ export {
     IconBell,
     IconCog,
     IconLogout,
+    IconWindowClose,
 };

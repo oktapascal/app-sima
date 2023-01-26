@@ -1,5 +1,6 @@
 <script lang="ts">
-    import {IconMenu, IconMenuOpen, WebNavbar} from "@/components";
+    import {breakpoint} from "@/stores/breakpointStore";
+    import {IconMenu, IconMenuOpen, WebNavbar, MobileNavbar} from "@/components";
 
     let isOpen: boolean = false;
 
@@ -24,5 +25,9 @@
     </div>
 </div>
 <div class="flex-none">
-    <WebNavbar/>
+    {#if $breakpoint}
+        <MobileNavbar/>
+    {:else }
+        <WebNavbar/>
+    {/if}
 </div>
