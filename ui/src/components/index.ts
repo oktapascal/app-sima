@@ -13,6 +13,7 @@ export {
     IconBell,
     IconLogout,
     IconWindowClose,
+    IconCamera,
 } from "./icons";
 export {BoxDefault} from "./box";
 export {InputDefault, InputGroup} from "./inputs";
@@ -20,6 +21,6 @@ export {ButtonDefault} from "./buttons";
 export {AlertDefault} from "./alerts";
 export {Loading, LoadingPage} from "./loadings";
 export {NavbarBase, NavbarUser, NavbarGuest} from "./navbars";
-export {Notification, Config, SignOut} from "./others";
+export {ErrorMessage, Notification, Config, SignOut} from "./others";
 export {WebNavbar} from "./webs";
 export {MobileNavbar, MobileProfile, MobileProfileBox} from "./mobiles";

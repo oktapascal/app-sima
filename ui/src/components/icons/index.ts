@@ -12,6 +12,7 @@ import IconBell from "./IconBell.svelte";
 import IconCog from "./IconCog.svelte";
 import IconLogout from "./IconLogout.svelte";
 import IconWindowClose from "./IconWindowClose.svelte";
+import IconCamera from "./IconCamera.svelte";
 
 export {
     IconMoon,
@@ -28,4 +29,5 @@ export {
     IconCog,
     IconLogout,
     IconWindowClose,
+    IconCamera,
 };

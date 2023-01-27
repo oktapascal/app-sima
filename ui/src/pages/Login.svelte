@@ -6,7 +6,7 @@
     import {auth} from "@/stores/authStore";
     import type {IAlert, IAuth, ILoginRequest, ILoginResponse, IErrorMessage} from "@/types";
     import {Validators} from "@/libs/validator";
-    import {BoxDefault, ButtonDefault, IconEye, IconEyeOff, InputDefault, InputGroup} from "@/components";
+    import {BoxDefault, ButtonDefault, IconEye, IconEyeOff, InputDefault, InputGroup, ErrorMessage} from "@/components";
     import instance from "@/libs/instance";
 
     export let registerFocus;
@@ -98,7 +98,9 @@
                     <InputDefault name="username" type="text" label="Username" placeholder="Username"
                                   isError={$errors.username && $touched.username} readonly={loading}/>
                     {#if !!$errors.username}
-                        <p class="mt-1 pl-1 text-sm text-red-600 font-medium dark:text-red-500">{$errors.username}</p>
+                        <ErrorMessage>
+                            {$errors.username}
+                        </ErrorMessage>
                     {/if}
                 </div>
                 <div class="flex flex-col w-full mb-4">
@@ -118,7 +120,9 @@
                         </svelte:fragment>
                     </InputGroup>
                     {#if !!$errors.password}
-                        <p class="mt-1 pl-1 text-sm text-red-600 font-medium dark:text-red-500">{$errors.password}</p>
+                        <ErrorMessage>
+                            {$errors.password}
+                        </ErrorMessage>
                     {/if}
                 </div>
                 <div class="flex flex-col w-full py-4">
