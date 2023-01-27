@@ -19,6 +19,7 @@ type UserProfileResponses struct {
 	NoTelp     *string `json:"no_telp"`
 	Email      *string `json:"email"`
 	Foto       *string `json:"foto"`
+	Jabatan    *string `json:"jabatan"`
 }
 
 func ConvertToUserResponse(user domain.User) UserResponses {
@@ -41,5 +42,6 @@ func ConvertToUserProfileResponse(user domain.User) UserProfileResponses {
 		NoTelp:     user.NoTelp,
 		Email:      user.Email,
 		Foto:       user.Foto,
+		Jabatan:    user.Jabatan,
 	}
 }

@@ -10,5 +10,6 @@ export interface IProfileResponse extends Response<{
     no_telp: string | null
     username: string | null
     role: string | null
+    jabatan: string | null
 }> {
 }

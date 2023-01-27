@@ -6,6 +6,13 @@
     export let readonly: boolean = false;
     export let isError: boolean = false;
     export let className: string = "";
+
+    let props;
+
+    $: {
+        const {type, placeholder, name, label, readonly, isError, className, ...restprops} = $$props;
+        props = restprops;
+    }
 </script>
 
 <label for="{name}" class="label block mb-2 text-sm font-medium text-gray-500 dark:text-white"
@@ -17,4 +24,5 @@
        {placeholder}
        {name}
        {readonly}
+       {...props}
 >

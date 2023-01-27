@@ -1,12 +1,16 @@
 <script lang="ts">
+    import {onMount} from "svelte";
     import {createForm} from "felte";
-    import type {IProfileRequest} from "@/types";
+    import {AxiosError, type AxiosResponse} from "axios";
+    import {alert} from "@/stores/alertStore";
+    import type {IProfileRequest, IProfileResponse, IAlert} from "@/types";
     import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
     import {Validators} from "@/libs/validator";
+    import instance from "@/libs/instance";
 
     let uploadFile;
 
-    const {form, errors, touched} = createForm<IProfileRequest>({
+    const {form, errors, touched, setData, data} = createForm<IProfileRequest>({
         initialValues: {
             nama: "",
             email: "",
@@ -57,6 +61,37 @@
             return errors;
         },
     });
+
+    async function getDataProfile() {
+        try {
+            const response: AxiosResponse<IProfileResponse> = await instance.get("/auth/profile");
+
+            const {nama, alamat, email, jabatan, no_telp} = response.data.data;
+            setData({
+                nama,
+                alamat,
+                jabatan,
+                email,
+                no_telp,
+            });
+        } catch (error: AxiosError) {
+            const alertState: IAlert = {
+                type: "error",
+                text: error.response.statusText,
+                show: true,
+            };
+
+            alert.set(alertState);
+        }
+    }
+
+    onMount(() => {
+        async function load() {
+            await getDataProfile();
+        }
+
+        load();
+    });
 </script>
 
 <div class="mt-2.5 h-full w-full bg-white shadow-md lg:rounded-lg lg:shadow-lg lg:border lg:border-gray-200 dark:bg-gray-700">
@@ -80,7 +115,7 @@
         <div class="flex flex-col flex-1 my-4 lg:my-0">
             <form use:form>
                 <div class="my-2.5">
-                    <InputDefault label="Nama" name="nama" placeholder="Nama" type="text"
+                    <InputDefault label="Nama" name="nama" placeholder="Nama" type="text" value={$data.nama}
                                   isError={$errors.nama && $touched.nama}/>
                     {#if !!$errors.nama}
                         <ErrorMessage>
@@ -89,7 +124,7 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="Email" name="email" placeholder="Email" type="email"
+                    <InputDefault label="Email" name="email" placeholder="Email" type="email" value={$data.email}
                                   isError={$errors.email && $touched.email}/>
                     {#if !!$errors.email}
                         <ErrorMessage>
@@ -99,6 +134,7 @@
                 </div>
                 <div class="my-2.5">
                     <InputDefault label="No. Telepon" name="no_telp" placeholder="No. Telepon" type="number"
+                                  value={$data.no_telp}
                                   isError={$errors.no_telp && $touched.no_telp}/>
                     {#if !!$errors.no_telp}
                         <ErrorMessage>
@@ -107,7 +143,7 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text"
+                    <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text" value={$data.alamat}
                                   isError={$errors.alamat && $touched.alamat}/>
                     {#if !!$errors.alamat}
                         <ErrorMessage>
@@ -116,7 +152,7 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="Jabatan" name="jabatan" placeholder="Jabatan" type="text"
+                    <InputDefault label="Jabatan" name="jabatan" placeholder="Jabatan" type="text" value={$data.jabatan}
                                   isError={$errors.jabatan && $touched.jabatan}/>
                     {#if !!$errors.jabatan}
                         <ErrorMessage>

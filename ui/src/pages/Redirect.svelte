@@ -54,3 +54,7 @@
         }
     }
 </script>
+
+<div>
+    redirecting to...
+</div>
