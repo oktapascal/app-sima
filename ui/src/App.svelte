@@ -59,6 +59,11 @@
         {/if}
     </NavbarBase>
     <main class="lg:px-2.5 lg:pb-2.5">
+
+        <Route path="/" primary={false} let:location>
+            <Redirect/>
+        </Route>
+        
         <PublicRoute path="login" let:location>
             <LazyRoute component={Login} delayMs={500}>
                 <LoadingPage/>
@@ -75,10 +80,6 @@
                 <LoadingPage/>
             </LazyRoute>
         </PrivateRoute>
-
-        <Route path="/" primary={false} let:location>
-            <Redirect/>
-        </Route>
     </main>
 </Router>
 
