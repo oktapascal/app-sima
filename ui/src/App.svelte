@@ -1,7 +1,7 @@
 <script lang="ts">
     import "./assets/css/app.css";
     import {onMount} from "svelte";
-    import {Router} from "svelte-navigator";
+    import {Router, Route} from "svelte-navigator";
     import Portal from "svelte-portal";
     import {theme} from "@/stores/themeStore";
     import {alert} from "@/stores/alertStore";
@@ -12,7 +12,8 @@
     import PublicRoute from "@/pages/PublicRoute.svelte";
     import PrivateRoute from "@/pages/PrivateRoute.svelte";
     import LoadingPage from "@/components/loadings/LoadingPage.svelte";
-    
+    import Redirect from "@/pages/Redirect.svelte";
+
     const delayModuleLoad = module =>
         new Promise(res =>
             setTimeout(() => res(module), Math.random() * 2000),
@@ -20,6 +21,7 @@
 
     const Login = () => import("./pages/Login.svelte").then(delayModuleLoad);
     const Dashboard = () => import("./pages/protected/Dashboard.svelte").then(delayModuleLoad);
+    const Profile = () => import("./pages/protected/Profile.svelte").then(delayModuleLoad);
 
     function onResize() {
         const width = window.screen.width;
@@ -63,11 +65,20 @@
             </LazyRoute>
         </PublicRoute>
 
-        <PrivateRoute path="protected/dashboard" let:location>
+        <PrivateRoute path="dashboard" let:location>
             <LazyRoute component={Dashboard} delayMs={500}>
                 <LoadingPage/>
             </LazyRoute>
         </PrivateRoute>
+        <PrivateRoute path="profile" let:location>
+            <LazyRoute component={Profile} delayMs={500}>
+                <LoadingPage/>
+            </LazyRoute>
+        </PrivateRoute>
+
+        <Route path="/" primary={false} let:location>
+            <Redirect/>
+        </Route>
     </main>
 </Router>
 

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import {onMount} from "svelte";
     import {useNavigate} from "svelte-navigator";
-    import {auth} from "@/stores/authStore";
-    import {alert} from "@/stores/alertStore";
     import {AxiosError, type AxiosResponse} from "axios";
     import type {IAuth, IProfileResponse, IAlert} from "@/types";
     import instance from "@/libs/instance";
+    import {auth} from "@/stores/authStore";
+    import {alert} from "@/stores/alertStore";
+    import {onMount} from "svelte";
 
     const navigate = useNavigate();
 
@@ -46,11 +46,11 @@
         load();
     });
 
-    $: if ($auth.isAuthenticated && !isLoading) {
-        navigate("/dashboard", {replace: true});
+    $: {
+        if ($auth.isAuthenticated && !isLoading) {
+            navigate("/dashboard", {replace: true});
+        } else if (!$auth.isAuthenticated && !isLoading) {
+            navigate("/login", {replace: true});
+        }
     }
 </script>
-
-{#if !$auth.isAuthenticated}
-    <slot/>
-{/if}
