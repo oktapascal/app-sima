@@ -9,6 +9,7 @@
     import instance from "@/libs/instance";
 
     let uploadFile;
+    let loading: boolean;
 
     const {form, errors, touched, setData, data} = createForm<IProfileRequest>({
         initialValues: {
@@ -60,6 +61,10 @@
 
             return errors;
         },
+        onSubmit: async (values) => {
+            loading = true;
+            console.log(values);
+        },
     });
 
     async function getDataProfile() {
@@ -107,7 +112,8 @@
                 </div>
                 <input type="file" class="hidden" bind:this={uploadFile}/>
                 <button type="button"
-                        class="absolute top-20 right-0 p-2 rounded-full bg-gray-300/60 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-600/60">
+                        class="absolute top-20 right-0 p-2 rounded-full bg-gray-300/60 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-600/60"
+                >
                     <IconCamera className="h-5 w-5 text-gray-500 dark:text-white"/>
                 </button>
             </div>
@@ -116,7 +122,7 @@
             <form use:form>
                 <div class="my-2.5">
                     <InputDefault label="Nama" name="nama" placeholder="Nama" type="text" value={$data.nama}
-                                  isError={$errors.nama && $touched.nama}/>
+                                  readonly={loading} isError={$errors.nama && $touched.nama}/>
                     {#if !!$errors.nama}
                         <ErrorMessage>
                             {$errors.nama}
@@ -125,7 +131,7 @@
                 </div>
                 <div class="my-2.5">
                     <InputDefault label="Email" name="email" placeholder="Email" type="email" value={$data.email}
-                                  isError={$errors.email && $touched.email}/>
+                                  readonly={loading} isError={$errors.email && $touched.email}/>
                     {#if !!$errors.email}
                         <ErrorMessage>
                             {$errors.email}
@@ -134,7 +140,7 @@
                 </div>
                 <div class="my-2.5">
                     <InputDefault label="No. Telepon" name="no_telp" placeholder="No. Telepon" type="number"
-                                  value={$data.no_telp}
+                                  value={$data.no_telp} readonly={loading}
                                   isError={$errors.no_telp && $touched.no_telp}/>
                     {#if !!$errors.no_telp}
                         <ErrorMessage>
@@ -144,7 +150,7 @@
                 </div>
                 <div class="my-2.5">
                     <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text" value={$data.alamat}
-                                  isError={$errors.alamat && $touched.alamat}/>
+                                  readonly={loading} isError={$errors.alamat && $touched.alamat}/>
                     {#if !!$errors.alamat}
                         <ErrorMessage>
                             {$errors.alamat}
@@ -153,7 +159,7 @@
                 </div>
                 <div class="my-2.5">
                     <InputDefault label="Jabatan" name="jabatan" placeholder="Jabatan" type="text" value={$data.jabatan}
-                                  isError={$errors.jabatan && $touched.jabatan}/>
+                                  readonly={loading} isError={$errors.jabatan && $touched.jabatan}/>
                     {#if !!$errors.jabatan}
                         <ErrorMessage>
                             {$errors.jabatan}
@@ -161,7 +167,7 @@
                     {/if}
                 </div>
                 <div class="mt-6 w-full">
-                    <ButtonDefault type="submit" label="Save" fullWidth={true}/>
+                    <ButtonDefault type="submit" label="Save" fullWidth={true} disabled={loading}/>
                 </div>
             </form>
         </div>
