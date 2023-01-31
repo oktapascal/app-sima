@@ -1,15 +1,15 @@
 package domain
 
 type User struct {
-	Username   string  `firestore:"username"`
-	Password   string  `firestore:"password"`
-	Role       string  `firestore:"role"`
-	KodeLokasi string  `firestore:"kode_lokasi"`
-	Nik        string  `firestore:"nik"`
-	Nama       string  `firestore:"nama"`
-	Alamat     *string `firestore:"alamat"`
-	NoTelp     *string `firestore:"no_telp"`
-	Email      *string `firestore:"email"`
-	Jabatan    *string `firestore:"jabatan"`
-	Foto       *string `firestore:"foto"`
+	IdUser       int     `gorm:"column:id_user"`
+	Username     string  `gorm:"column:username"`
+	Password     string  `gorm:"column:password"`
+	Role         string  `gorm:"column:role"`
+	RedirectView string  `gorm:"column:redirect_view"`
+	FlagInput    int     `gorm:"column:flag_input"`
+	FlagEdit     int     `gorm:"column:flag_edit"`
+	FlagDelete   int     `gorm:"column:flag_delete"`
+	Photo        *string `gorm:"column:photo"`
+	Provider     *string `gorm:"column:provider"`
+	IDProvider   *int    `gorm:"column:id_provider"`
 }

@@ -2,9 +2,8 @@ package web
 
 type UpdateUserProfileRequest struct {
 	Nik     string
-	Nama    string `json:"nama" validate:"required"`
+	Name    string `json:"name" validate:"required"`
 	NoTelp  string `json:"no_telp" validate:"required,number,min=11,max=12"`
-	Jabatan string `json:"jabatan" validate:"required"`
-	Alamat  string `json:"alamat" validate:"required"`
+	Address string `json:"address" validate:"required"`
 	Email   string `json:"email" validate:"required,email"`
 }

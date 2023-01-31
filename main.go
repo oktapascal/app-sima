@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -30,10 +29,10 @@ func main() {
 		ErrorHandler: exceptions.ErrorHandler,
 	})
 
-	//mySql := database.NewMysql(config)
+	mysql := database.NewMysql(config)
 
-	ctx := context.Background()
-	fireStore := database.NewFirestoreClient(config, ctx)
+	//ctx := context.Background()
+	//fireStore := database.NewFirestoreClient(config, ctx)
 
 	validate := validator.New()
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
@@ -54,19 +53,25 @@ func main() {
 		AllowHeaders:     "*",
 		AllowCredentials: true,
 	}))
-	app.Use(csrf.New(csrf.Config{
-		KeyLookup:      "cookie:csrf_",
-		CookieName:     "csrf_",
-		CookieHTTPOnly: true,
-		CookieSameSite: "Strict",
-		Expiration:     1 * time.Hour,
-		KeyGenerator:   utils.GenerateUUID,
-	}))
+	// disable when development mode
+	if config.Get("MODE") != "DEVELOPMENT" {
+		app.Use(csrf.New(csrf.Config{
+			KeyLookup:      "cookie:csrf_",
+			CookieName:     "csrf_",
+			CookieHTTPOnly: true,
+			CookieSameSite: "Strict",
+			Expiration:     8 * time.Hour,
+			KeyGenerator:   utils.GenerateUUID,
+		}))
+	}
 
 	userRepository := repository.NewUserRepositoryImpl()
-	userServices := services.NewUserServicesImpl(userRepository, fireStore)
+	employeeRepository := repository.NewEmployeeRepositoryImpl()
+	sessionRepository := repository.NewSessionRepositoryImpl()
 
-	authControllers := controllers.NewAuthControllerImpl(validate, userServices, jwtConfig, cookiesConfig)
+	authServices := services.NewAuthServicesImpl(userRepository, employeeRepository, sessionRepository, mysql)
+
+	authControllers := controllers.NewAuthControllerImpl(validate, authServices, jwtConfig, cookiesConfig)
 
 	routes.NewRouter(app, middlewareAuth, authControllers)
 

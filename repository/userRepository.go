@@ -1,17 +1,12 @@
 package repository
 
 import (
-	"cloud.google.com/go/firestore"
-	"context"
 	"github.com/oktapascal/app-sima/models/domain"
+	"gorm.io/gorm"
 )
 
 type UserRepository interface {
-	Store(ctx context.Context, db *firestore.Client, user domain.User)
-	Update(ctx context.Context, db *firestore.Client, user domain.User)
-	CheckUsername(ctx context.Context, db *firestore.Client, username string) (domain.User, error)
-	CheckDuplicateUsername(ctx context.Context, db *firestore.Client, username string) error
-	StoreSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User)
-	DeleteSessionUser(ctx context.Context, db *firestore.Client, session domain.Session, user domain.User)
-	GetUserProfile(ctx context.Context, db *firestore.Client, nik string) (domain.User, error)
+	Store(db *gorm.DB, user domain.User) int
+	Update(db *gorm.DB, user domain.User)
+	GetUser(db *gorm.DB, username string) (domain.User, error)
 }

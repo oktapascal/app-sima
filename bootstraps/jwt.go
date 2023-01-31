@@ -44,8 +44,9 @@ func (config *JwtImpl) GenerateAccessToken(user web.UserResponses) (string, time
 func (config *JwtImpl) generateToken(user web.UserResponses, expiration time.Time, secret []byte) (string, time.Time, error) {
 	// Set the claims for the JWT using the given user's information.
 	claims := &web.JwtClaims{
+		IdUser:     user.IdUser,
 		Nik:        user.Nik,
-		KodeLokasi: user.KodeLokasi,
+		IdLocation: user.IdLocation,
 		Role:       user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: &jwt.NumericDate{Time: expiration},

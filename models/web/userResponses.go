@@ -3,45 +3,45 @@ package web
 import "github.com/oktapascal/app-sima/models/domain"
 
 type UserResponses struct {
+	IdUser     int    `json:"-"`
 	Nik        string `json:"nik"`
-	KodeLokasi string `json:"kode_lokasi"`
+	IdLocation string `json:"id_location"`
 	Password   string `json:"-"`
 	Role       string `json:"role"`
 }
 
 type UserProfileResponses struct {
 	Username   string  `json:"username"`
-	KodeLokasi string  `json:"kode_lokasi"`
+	IdLocation string  `json:"id_location"`
 	Role       string  `json:"role"`
 	Nik        string  `json:"nik"`
-	Nama       string  `json:"nama"`
-	Alamat     *string `json:"alamat"`
+	Name       string  `json:"name"`
+	Address    *string `json:"address"`
 	NoTelp     *string `json:"no_telp"`
 	Email      *string `json:"email"`
-	Foto       *string `json:"foto"`
-	Jabatan    *string `json:"jabatan"`
+	Photo      *string `json:"photo"`
 }
 
-func ConvertToUserResponse(user domain.User) UserResponses {
+func ConvertToUserResponse(user domain.User, employee domain.Employee) UserResponses {
 	return UserResponses{
-		Nik:        user.Nik,
-		KodeLokasi: user.KodeLokasi,
+		IdUser:     user.IdUser,
+		Nik:        employee.Nik,
+		IdLocation: employee.IdLocation,
 		Password:   user.Password,
 		Role:       user.Role,
 	}
 }
 
-func ConvertToUserProfileResponse(user domain.User) UserProfileResponses {
+func ConvertToUserProfileResponse(user domain.User, employee domain.Employee) UserProfileResponses {
 	return UserProfileResponses{
 		Username:   user.Username,
-		KodeLokasi: user.KodeLokasi,
+		IdLocation: employee.IdLocation,
 		Role:       user.Role,
-		Nik:        user.Nik,
-		Nama:       user.Nama,
-		Alamat:     user.Alamat,
-		NoTelp:     user.NoTelp,
-		Email:      user.Email,
-		Foto:       user.Foto,
-		Jabatan:    user.Jabatan,
+		Nik:        employee.Nik,
+		Name:       employee.Name,
+		Address:    employee.Address,
+		NoTelp:     employee.NoTelp,
+		Email:      employee.Email,
+		Photo:      user.Photo,
 	}
 }

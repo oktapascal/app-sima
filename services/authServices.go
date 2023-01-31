@@ -5,7 +5,7 @@ import (
 	"github.com/oktapascal/app-sima/models/web"
 )
 
-type UserServices interface {
+type AuthServices interface {
 	Register(ctx context.Context, request web.RegisterRequest)
 	Login(ctx context.Context, request web.LoginRequest) web.UserResponses
 	Logout(ctx context.Context, request web.SessionRequest)

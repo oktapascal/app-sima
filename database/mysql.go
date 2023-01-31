@@ -58,9 +58,5 @@ func NewMysql(config bootstraps.Config) *gorm.DB {
 	mysqlDb.SetConnMaxIdleTime(10 * time.Minute)
 	mysqlDb.SetConnMaxLifetime(15 * time.Minute)
 
-	// Perform an automatic migration of certain structs to the MySQL database.
-	//err = db.AutoMigrate(&domain.User{}, &domain.Karyawan{}, &domain.Session{})
-	//utils.PanicIfError(err)
-
 	return db
 }
