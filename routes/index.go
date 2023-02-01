@@ -20,6 +20,7 @@ func NewRouter(app *fiber.App,
 	authGroupWithMiddleware.Post("/logout", timeout.New(authControllers.Logout, 10*time.Second))
 	authGroupWithMiddleware.Post("/profile", timeout.New(authControllers.UpdateUserProfile, 10*time.Second))
 	authGroupWithMiddleware.Get("/profile", timeout.New(authControllers.GetUserProfile, 10*time.Second))
+	authGroupWithMiddleware.Post("/upload-photo", timeout.New(authControllers.UploadUserPhoto, 10*time.Second))
 
 	app.Use(func(ctx *fiber.Ctx) error {
 		if strings.HasPrefix(ctx.OriginalURL(), "/api") {

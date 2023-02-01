@@ -1,15 +1,14 @@
 import type {Response} from "./IResponse";
 
 export interface IProfileResponse extends Response<{
-    alamat: string | null
+    address: string | null
     email: string | null
-    kode_lokasi: string | null
-    nama: string | null
-    foto: string | null
+    id_location: string | null
+    name: string | null
+    photo: string | null
     nik: string | null
     no_telp: string | null
     username: string | null
     role: string | null
-    jabatan: string | null
 }> {
 }

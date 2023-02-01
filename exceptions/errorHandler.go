@@ -89,6 +89,8 @@ func validationError(ctx *fiber.Ctx, err interface{}) bool {
 				message = fmt.Sprintf("%s maksimal terdiri dari %s karakter", err.Field(), err.Param())
 			case "email":
 				message = fmt.Sprintf("%s tidak valid", err.Field())
+			case "file":
+				message = fmt.Sprintf("format file %s tidak valid", err.Field())
 			default:
 				message = exceptions.Error()
 			}
@@ -169,7 +171,7 @@ func badRequestError(ctx *fiber.Ctx, err interface{}) bool {
 		response := web.JsonResponses{
 			StatusCode:    fiber.StatusBadRequest,
 			StatusMessage: "Bad Request",
-			Data:          exceptions.Error,
+			Data:          exceptions,
 		}
 
 		err := ctx.Status(fiber.StatusBadRequest).JSON(response)

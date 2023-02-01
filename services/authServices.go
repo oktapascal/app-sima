@@ -12,4 +12,5 @@ type AuthServices interface {
 	StoreSessionUser(ctx context.Context, request web.SessionRequest)
 	GetUserProfile(ctx context.Context, nik string) web.UserProfileResponses
 	UpdateUserProfile(ctx context.Context, request web.UpdateUserProfileRequest)
+	UploadUserPhoto(ctx context.Context, request web.UploadUserPhoto)
 }

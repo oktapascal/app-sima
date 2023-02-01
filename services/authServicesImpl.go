@@ -127,13 +127,29 @@ func (services *AuthServicesImpl) UpdateUserProfile(ctx context.Context, request
 	tx := services.Db.WithContext(ctx).Begin()
 	defer utils.CommitRollback(tx)
 
-	employee := domain.Employee{
-		Nik:     request.Nik,
-		Name:    request.Name,
-		Address: &request.Address,
-		NoTelp:  &request.NoTelp,
-		Email:   &request.Email,
+	employee, err := services.EmployeeRepository.GetOne(tx, request.Nik)
+	if err != nil {
+		panic(exceptions.NewErrorNotFound(err.Error()))
 	}
 
+	employee.Name = request.Name
+	employee.Address = &request.Address
+	employee.NoTelp = &request.NoTelp
+	employee.Email = &request.Email
+
 	services.EmployeeRepository.Update(tx, employee)
+}
+
+func (services *AuthServicesImpl) UploadUserPhoto(ctx context.Context, request web.UploadUserPhoto) {
+	tx := services.Db.WithContext(ctx).Begin()
+	defer utils.CommitRollback(tx)
+
+	user, err := services.UserRepository.GetUser(tx, request.Nik)
+	if err != nil {
+		panic(exceptions.NewErrorNotFound(err.Error()))
+	}
+
+	user.Photo = &request.Photo
+
+	services.UserRepository.StorePhoto(tx, user)
 }

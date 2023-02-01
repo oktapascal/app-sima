@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"github.com/dchest/uniuri"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/oktapascal/app-sima/bootstraps"
@@ -8,6 +10,7 @@ import (
 	"github.com/oktapascal/app-sima/models/web"
 	"github.com/oktapascal/app-sima/services"
 	"github.com/oktapascal/app-sima/utils"
+	"strings"
 )
 
 type AuthControllersImpl struct {
@@ -137,6 +140,52 @@ func (controllers *AuthControllersImpl) UpdateUserProfile(ctx *fiber.Ctx) error 
 	request.Nik = exception.Nik
 
 	controllers.AuthServices.UpdateUserProfile(cntx, *request)
+
+	responses := web.JsonResponses{
+		StatusCode:    fiber.StatusOK,
+		StatusMessage: "OK",
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(responses)
+}
+
+func (controllers *AuthControllersImpl) UploadUserPhoto(ctx *fiber.Ctx) error {
+	cntx := ctx.UserContext()
+
+	request := new(web.UploadUserPhoto)
+
+	file, err := ctx.FormFile("photo")
+	if err != nil {
+		panic(exceptions.NewErrorNotFound("file tidak ditemukan"))
+	}
+
+	mime := file.Header.Get("Content-Type")
+	var imageValid = false
+
+	validationImage := [2]string{"image/jpeg", "image/png"}
+	for _, val := range validationImage {
+		if strings.HasPrefix(mime, val) {
+			imageValid = true
+			break
+		}
+	}
+
+	if !imageValid {
+		panic(exceptions.NewErrorBadRequest("tipe file tidak sesuai ketentuan"))
+	}
+
+	randomString := uniuri.New()
+	newFileName := fmt.Sprintf("%s_%s", randomString, file.Filename)
+
+	locals := ctx.Locals("user")
+	exception, _ := locals.(*web.JwtClaims)
+
+	request.Nik = exception.Nik
+	request.Photo = newFileName
+	controllers.AuthServices.UploadUserPhoto(cntx, *request)
+
+	err = ctx.SaveFile(file, fmt.Sprintf("./storage/avatars/%s", newFileName))
+	utils.PanicIfError(err)
 
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,

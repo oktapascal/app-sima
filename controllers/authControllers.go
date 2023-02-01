@@ -8,4 +8,5 @@ type AuthControllers interface {
 	Logout(ctx *fiber.Ctx) error
 	GetUserProfile(ctx *fiber.Ctx) error
 	UpdateUserProfile(ctx *fiber.Ctx) error
+	UploadUserPhoto(ctx *fiber.Ctx) error
 }

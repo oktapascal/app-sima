@@ -1,7 +1,6 @@
 export interface IProfileRequest {
-    nama: string;
+    name: string;
     no_telp: string;
-    jabatan: string;
-    alamat: string;
+    address: string;
     email: string;
 }

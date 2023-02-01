@@ -13,48 +13,42 @@
 
     const {form, errors, touched, setData, data} = createForm<IProfileRequest>({
         initialValues: {
-            nama: "",
+            name: "",
             email: "",
             no_telp: "",
-            alamat: "",
-            jabatan: "",
+            address: "",
         },
         validate: (values) => {
             const errors: IProfileRequest = {
-                nama: "",
+                name: "",
                 no_telp: "",
                 email: "",
-                alamat: "",
-                jabatan: "",
+                address: "",
             };
 
-            if (Validators.required(values.nama)) {
-                errors.nama = "Nama tidak boleh kosong";
-            }
-
-            if (Validators.required(values.jabatan)) {
-                errors.jabatan = "Jabatan tidak boleh kosong";
+            if (Validators.required(values.name)) {
+                errors.name = "Nama tidak boleh kosong";
             }
 
             if (Validators.required(values.email)) {
                 errors.email = "Email tidak boleh kosong";
             }
 
-            if (Validators.required(values.alamat)) {
-                errors.alamat = "Alamat tidak boleh kosong";
+            if (Validators.required(values.address)) {
+                errors.address = "Alamat tidak boleh kosong";
             }
 
             if (!Validators.required(values.email) && !Validators.isEmailValid(values.email)) {
                 errors.email = `Email "${values.email} tidak valid`;
             }
 
-            if (Validators.required(values.no_telp.toString())) {
+            if (Validators.required(values.no_telp?.toString())) {
                 errors.no_telp = "No. Telepon tidak boleh kosong";
             } else {
-                if (Validators.min(values.no_telp.toString(), 11)) {
+                if (Validators.min(values.no_telp?.toString(), 11)) {
                     errors.no_telp = "No. Telepon minimal 11 digit";
                 }
-                if (Validators.max(values.no_telp.toString(), 12)) {
+                if (Validators.max(values.no_telp?.toString(), 12)) {
                     errors.no_telp = "No. Telepon maksimal 12 digit";
                 }
             }
@@ -71,11 +65,10 @@
         try {
             const response: AxiosResponse<IProfileResponse> = await instance.get("/auth/profile");
 
-            const {nama, alamat, email, jabatan, no_telp} = response.data.data;
+            const {name, address, email, no_telp} = response.data.data;
             setData({
-                nama,
-                alamat,
-                jabatan,
+                name,
+                address,
                 email,
                 no_telp,
             });
@@ -121,11 +114,11 @@
         <div class="flex flex-col flex-1 my-4 lg:my-0">
             <form use:form>
                 <div class="my-2.5">
-                    <InputDefault label="Nama" name="nama" placeholder="Nama" type="text" value={$data.nama}
-                                  readonly={loading} isError={$errors.nama && $touched.nama}/>
-                    {#if !!$errors.nama}
+                    <InputDefault label="Nama" name="nama" placeholder="Nama" type="text" value={$data.name}
+                                  readonly={loading} isError={$errors.name && $touched.name}/>
+                    {#if !!$errors.name}
                         <ErrorMessage>
-                            {$errors.nama}
+                            {$errors.name}
                         </ErrorMessage>
                     {/if}
                 </div>
@@ -149,20 +142,11 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text" value={$data.alamat}
-                                  readonly={loading} isError={$errors.alamat && $touched.alamat}/>
-                    {#if !!$errors.alamat}
+                    <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text" value={$data.address}
+                                  readonly={loading} isError={$errors.address && $touched.address}/>
+                    {#if !!$errors.address}
                         <ErrorMessage>
-                            {$errors.alamat}
-                        </ErrorMessage>
-                    {/if}
-                </div>
-                <div class="my-2.5">
-                    <InputDefault label="Jabatan" name="jabatan" placeholder="Jabatan" type="text" value={$data.jabatan}
-                                  readonly={loading} isError={$errors.jabatan && $touched.jabatan}/>
-                    {#if !!$errors.jabatan}
-                        <ErrorMessage>
-                            {$errors.jabatan}
+                            {$errors.address}
                         </ErrorMessage>
                     {/if}
                 </div>

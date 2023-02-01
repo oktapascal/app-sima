@@ -7,3 +7,8 @@ type UpdateUserProfileRequest struct {
 	Address string `json:"address" validate:"required"`
 	Email   string `json:"email" validate:"required,email"`
 }
+
+type UploadUserPhoto struct {
+	Nik   string
+	Photo string
+}

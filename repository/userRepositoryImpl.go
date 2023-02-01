@@ -55,3 +55,7 @@ func (repository *UserRepositoryImpl) GetUser(db *gorm.DB, username string) (dom
 
 	return user, nil
 }
+
+func (repository *UserRepositoryImpl) StorePhoto(db *gorm.DB, user domain.User) {
+	db.Table("user a").Where("a.username = ?", user.Username).Update("photo", user.Photo)
+}
