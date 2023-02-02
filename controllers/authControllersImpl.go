@@ -190,6 +190,9 @@ func (controllers *AuthControllersImpl) UploadUserPhoto(ctx *fiber.Ctx) error {
 	responses := web.JsonResponses{
 		StatusCode:    fiber.StatusOK,
 		StatusMessage: "OK",
+		Data: map[string]string{
+			"file_name": newFileName,
+		},
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(responses)

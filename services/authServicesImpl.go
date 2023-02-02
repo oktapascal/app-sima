@@ -2,12 +2,14 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"github.com/oktapascal/app-sima/exceptions"
 	"github.com/oktapascal/app-sima/models/domain"
 	"github.com/oktapascal/app-sima/models/web"
 	"github.com/oktapascal/app-sima/repository"
 	"github.com/oktapascal/app-sima/utils"
 	"gorm.io/gorm"
+	"os"
 	"time"
 )
 
@@ -147,6 +149,11 @@ func (services *AuthServicesImpl) UploadUserPhoto(ctx context.Context, request w
 	user, err := services.UserRepository.GetUser(tx, request.Nik)
 	if err != nil {
 		panic(exceptions.NewErrorNotFound(err.Error()))
+	}
+
+	if user.Photo != nil {
+		err := os.Remove(fmt.Sprintf("./storage/avatars/%s", *user.Photo))
+		utils.PanicIfError(err)
 	}
 
 	user.Photo = &request.Photo
