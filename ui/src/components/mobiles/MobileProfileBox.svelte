@@ -40,7 +40,7 @@
                 isAuthenticated: false,
                 role: null,
                 nik: null,
-                photo: "/images/avatars/default.png",
+                photo: "default.png",
             };
 
             auth.set(authState);
