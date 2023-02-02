@@ -6,4 +6,5 @@ export const auth = writable<IAuth>({
     id_location: null,
     role: null,
     isAuthenticated: false,
+    photo: "/images/avatars/default.png",
 });

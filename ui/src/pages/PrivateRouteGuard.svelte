@@ -18,10 +18,11 @@
             const response: AxiosResponse<IProfileResponse> = await instance.get("/auth/profile");
 
             const authState: IAuth = {
-                kode_lokasi: response.data.data.kode_lokasi,
+                id_location: response.data.data.id_location,
                 role: response.data.data.role,
                 nik: response.data.data.nik,
                 isAuthenticated: true,
+                photo: "/images/avatars/default.png",
             };
 
             auth.set(authState);

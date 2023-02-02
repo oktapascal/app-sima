@@ -36,10 +36,11 @@
             await instance.post("/auth/logout");
 
             const authState: IAuth = {
+                id_location: null,
                 isAuthenticated: false,
-                nik: null,
                 role: null,
-                kode_lokasi: null,
+                nik: null,
+                photo: "/images/avatars/default.png",
             };
 
             auth.set(authState);
@@ -85,8 +86,8 @@
                 <div class="flex-1 mt-2">
                     <button type="button"
                             class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
-                        <img alt="avatar" src="/images/avatars/avatar.jpg" class="w-12 h-12 rounded-full"/>
-                        <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">9992121</span>
+                        <img alt="avatar" src="{$auth.photo}" class="w-12 h-12 rounded-full"/>
+                        <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">{$auth.nik}</span>
                     </button>
                 </div>
             </div>

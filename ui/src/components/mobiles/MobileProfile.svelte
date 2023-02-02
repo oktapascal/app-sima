@@ -1,5 +1,6 @@
 <script lang="ts">
     import {createEventDispatcher} from "svelte";
+    import {auth} from "@/stores/authStore";
 
     const dispatch = createEventDispatcher();
 
@@ -14,6 +15,6 @@
     <button type="button"
             class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200"
             on:click={onShowProfileBox}>
-        <img alt="avatar" src="/images/avatars/avatar.jpg" class="w-7 h-7 rounded-full"/>
+        <img alt="avatar" src="{$auth.photo}" class="w-7 h-7 rounded-full"/>
     </button>
 </div>
