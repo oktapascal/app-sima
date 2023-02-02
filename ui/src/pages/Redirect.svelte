@@ -4,7 +4,7 @@
     import type {IAuth, IProfileResponse, IAlert} from "@/types";
     import instance from "@/libs/instance";
     import {auth} from "@/stores/authStore";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {onMount} from "svelte";
 
     const navigate = useNavigate();
@@ -16,22 +16,23 @@
             const response: AxiosResponse<IProfileResponse> = await instance.get("/auth/profile");
 
             const authState: IAuth = {
-                kode_lokasi: response.data.data.kode_lokasi,
+                id_location: response.data.data.id_location,
                 role: response.data.data.role,
                 nik: response.data.data.nik,
                 isAuthenticated: true,
+                photo: "default.png",
             };
 
             auth.set(authState);
         } catch (error: AxiosError) {
-            if (!$alert.show) {
+            if (!$alertStore.show) {
                 const alertState: IAlert = {
                     type: "error",
                     text: error.response.statusText,
                     show: true,
                 };
 
-                alert.set(alertState);
+                alertStore.set(alertState);
             }
         } finally {
             isLoading = false;

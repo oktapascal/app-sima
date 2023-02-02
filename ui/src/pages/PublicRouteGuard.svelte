@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import {useNavigate} from "svelte-navigator";
     import {auth} from "@/stores/authStore";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {AxiosError, type AxiosResponse} from "axios";
     import type {IAuth, IProfileResponse, IAlert} from "@/types";
     import instance from "@/libs/instance";
@@ -25,14 +25,14 @@
 
             auth.set(authState);
         } catch (error: AxiosError) {
-            if (!$alert.show) {
+            if (!$alertStore.show) {
                 const alertState: IAlert = {
                     type: "error",
                     text: error.response.statusText,
                     show: true,
                 };
 
-                alert.set(alertState);
+                alertStore.set(alertState);
             }
         } finally {
             isLoading = false;

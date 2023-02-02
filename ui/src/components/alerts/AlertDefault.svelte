@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import {fade} from "svelte/transition";
     import {IconAlert, IconAlertBox, IconAlertCircle, IconCheckCircle} from "@/components";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {breakpoint} from "@/stores/breakpointStore";
 
     const icon = {
@@ -27,7 +27,7 @@
     };
 
     function hideAlert() {
-        alert.update((state) => {
+        alertStore.update((state) => {
             return {...state, show: false};
         });
     }

@@ -2,7 +2,7 @@
     import {createForm} from "felte";
     import {useNavigate} from "svelte-navigator";
     import {AxiosError, type AxiosResponse} from "axios";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import type {IAlert, IAuth, ILoginRequest, ILoginResponse, IErrorMessage} from "@/types";
     import {Validators} from "@/libs/validator";
@@ -61,8 +61,9 @@
             const authState: IAuth = {
                 nik: response.data.data.nik,
                 role: response.data.data.role,
-                kode_lokasi: response.data.data.kode_lokasi,
+                id_location: response.data.data.id_location,
                 isAuthenticated: true,
+                photo: response.data.data.photo,
             };
 
             auth.set(authState);
@@ -73,7 +74,7 @@
                 text: "Kamu berhasil login",
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
 
             navigate("/protected/dashboard", {replace: true});
         },

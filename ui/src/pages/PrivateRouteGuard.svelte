@@ -5,7 +5,7 @@
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
     import type {IProfileResponse, IAuth, IAlert} from "@/types";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -33,7 +33,7 @@
                 show: true,
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
         } finally {
             isLoading = false;
         }

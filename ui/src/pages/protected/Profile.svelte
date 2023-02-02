@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import {createForm} from "felte";
     import {AxiosError, type AxiosResponse} from "axios";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import type {IProfileRequest, IProfileResponse, IAlert} from "@/types";
     import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
@@ -80,8 +80,16 @@
                 show: true,
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
         }
+    }
+
+    async function uploadPhotoUser(file: File) {
+        console.log(file);
+    }
+
+    function onTriggerFileInput() {
+        console.log("test");
     }
 
     onMount(() => {
@@ -108,6 +116,7 @@
                 <input type="file" class="hidden" bind:this={uploadFile}/>
                 <button type="button"
                         class="absolute top-20 right-0 p-2 rounded-full bg-gray-300/60 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-600/60"
+                        on:click={onTriggerFileInput}
                 >
                     <IconCamera className="h-5 w-5 text-gray-500 dark:text-white"/>
                 </button>

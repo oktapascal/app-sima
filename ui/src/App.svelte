@@ -4,7 +4,7 @@
     import {Router, Route} from "svelte-navigator";
     import Portal from "svelte-portal";
     import {theme} from "@/stores/themeStore";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import {breakpoint} from "@/stores/breakpointStore";
     import {NavbarBase, NavbarUser, AlertDefault, NavbarGuest} from "@/components";
@@ -84,7 +84,7 @@
 </Router>
 
 <Portal target="body">
-    {#if $alert.show}
+    {#if $alertStore.show}
         <AlertDefault/>
     {/if}
 </Portal>

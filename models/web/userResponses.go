@@ -3,11 +3,12 @@ package web
 import "github.com/oktapascal/app-sima/models/domain"
 
 type UserResponses struct {
-	IdUser     int    `json:"-"`
-	Nik        string `json:"nik"`
-	IdLocation string `json:"id_location"`
-	Password   string `json:"-"`
-	Role       string `json:"role"`
+	IdUser     int     `json:"-"`
+	Nik        string  `json:"nik"`
+	IdLocation string  `json:"id_location"`
+	Password   string  `json:"-"`
+	Role       string  `json:"role"`
+	Photo      *string `json:"photo"`
 }
 
 type UserProfileResponses struct {
@@ -29,6 +30,7 @@ func ConvertToUserResponse(user domain.User, employee domain.Employee) UserRespo
 		IdLocation: employee.IdLocation,
 		Password:   user.Password,
 		Role:       user.Role,
+		Photo:      user.Photo,
 	}
 }
 

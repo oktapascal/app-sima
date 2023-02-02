@@ -2,7 +2,7 @@
     import {AxiosError} from "axios";
     import {useNavigate} from "svelte-navigator";
     import type {IAlert, IAuth} from "@/types";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
     import {Notification, Config, SignOut} from "@/components";
@@ -17,7 +17,8 @@
                 isAuthenticated: false,
                 nik: null,
                 role: null,
-                kode_lokasi: null,
+                id_location: null,
+                photo: "default.png",
             };
 
             auth.set(authState);
@@ -28,7 +29,7 @@
                 type: "success",
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
 
             navigate("/login", {replace: true});
         } catch (error: AxiosError) {
@@ -38,7 +39,7 @@
                 type: "error",
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
         }
     }
 </script>

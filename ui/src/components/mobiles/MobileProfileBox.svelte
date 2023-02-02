@@ -3,7 +3,7 @@
     import {createEventDispatcher} from "svelte";
     import {fly} from "svelte/transition";
     import {theme} from "@/stores/themeStore";
-    import {alert} from "@/stores/alertStore";
+    import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
     import type {IAlert, IAuth} from "@/types";
@@ -51,7 +51,7 @@
                 type: "success",
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
 
             navigate("/login", {replace: true});
         } catch (error: AxiosError) {
@@ -61,7 +61,7 @@
                 type: "error",
             };
 
-            alert.set(alertState);
+            alertStore.set(alertState);
         }
     }
 
