@@ -20,7 +20,7 @@
                 role: response.data.data.role,
                 nik: response.data.data.nik,
                 isAuthenticated: true,
-                photo: "/images/avatars/default.png",
+                photo: response.data.data.photo || "default.png",
             };
 
             auth.set(authState);

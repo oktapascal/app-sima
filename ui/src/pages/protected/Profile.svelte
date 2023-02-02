@@ -3,6 +3,7 @@
     import {createForm} from "felte";
     import {AxiosError, type AxiosResponse} from "axios";
     import {alert} from "@/stores/alertStore";
+    import {auth} from "@/stores/authStore";
     import type {IProfileRequest, IProfileResponse, IAlert} from "@/types";
     import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
     import {Validators} from "@/libs/validator";
@@ -13,17 +14,17 @@
 
     const {form, errors, touched, setData, data} = createForm<IProfileRequest>({
         initialValues: {
-            name: "",
-            email: "",
-            no_telp: "",
-            address: "",
+            name: null,
+            email: null,
+            no_telp: null,
+            address: null,
         },
         validate: (values) => {
             const errors: IProfileRequest = {
-                name: "",
-                no_telp: "",
-                email: "",
-                address: "",
+                name: null,
+                no_telp: null,
+                email: null,
+                address: null,
             };
 
             if (Validators.required(values.name)) {
@@ -101,7 +102,8 @@
         <div class="flex justify-center lg:basis-1/2">
             <div class="relative">
                 <div class="rounded-full border-2 border-gray-500">
-                    <img alt="profile" src="/images/avatars/avatar.jpg" class="rounded-full h-28 w-28">
+                    <img alt="profile" src="http://192.168.1.10:8080/api/storage/avatars/{$auth.photo}"
+                         class="rounded-full h-28 w-28">
                 </div>
                 <input type="file" class="hidden" bind:this={uploadFile}/>
                 <button type="button"

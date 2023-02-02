@@ -1,6 +1,6 @@
 export interface IProfileRequest {
-    name: string;
-    no_telp: string;
-    address: string;
-    email: string;
+    name: string | null;
+    no_telp: string | null;
+    address: string | null;
+    email: string | null;
 }
