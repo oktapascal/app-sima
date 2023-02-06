@@ -9,8 +9,6 @@
             value: true,
         });
     }
-
-    console.log($auth.photo);
 </script>
 
 <div class="mx-0.5">

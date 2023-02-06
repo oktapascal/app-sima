@@ -42,17 +42,17 @@
 
 <div transition:fade
      role="alert"
-     class="alert p-4 mb-4 text-white border rounded-lg fixed w-auto {$alert.type} {$breakpoint ? 'top-center':'bottom-right'}">
+     class="alert p-4 mb-4 text-white border rounded-lg fixed w-auto {$alertStore.type} {$breakpoint ? 'top-center':'bottom-right'}">
     <div class="flex items-center">
-        <svelte:component this={icon[$alert.type]} className="icon mr-2 w-6 h-6 text-white"/>
-        <h3 class="text-lg font-medium text-white">{text[$alert.type]}</h3>
+        <svelte:component this={icon[$alertStore.type]} className="icon mr-2 w-6 h-6 text-white"/>
+        <h3 class="text-lg font-medium text-white">{text[$alertStore.type]}</h3>
     </div>
     <div class="mt-2 mb-4 text-sm text-white">
-        {$alert.text}
+        {$alertStore.text}
     </div>
     <div class="flex">
         <button type="button"
-                class="btn-alert text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 {btnClass[$alert.type]}"
+                class="btn-alert text-white font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none focus:ring-2 {btnClass[$alertStore.type]}"
                 on:click={hideAlert}>
             Tutup
         </button>

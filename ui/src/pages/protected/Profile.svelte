@@ -4,12 +4,13 @@
     import {AxiosError, type AxiosResponse} from "axios";
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
-    import type {IProfileRequest, IProfileResponse, IAlert} from "@/types";
+    import type {IProfileRequest, IProfileResponse, IAlert, IUploadResponse} from "@/types";
     import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
     import {Validators} from "@/libs/validator";
     import instance from "@/libs/instance";
 
     let uploadFile;
+    let avatar;
     let loading: boolean;
 
     const {form, errors, touched, setData, data} = createForm<IProfileRequest>({
@@ -85,11 +86,72 @@
     }
 
     async function uploadPhotoUser(file: File) {
-        console.log(file);
+        loading = true;
+        try {
+            const response: AxiosResponse<IUploadResponse> = await instance.post("/auth/upload-photo", {
+                photo: file,
+            }, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            auth.update((state) => {
+                return {...state, photo: response.data.data.file_name};
+            });
+
+        } catch (error: AxiosError) {
+            const alertState: IAlert = {
+                type: "error",
+                text: error.response.statusText,
+                show: true,
+            };
+
+            alertStore.set(alertState);
+        } finally {
+            loading = false;
+        }
+    }
+
+    async function onUploadPhotoUser(event) {
+        const image = event.target.files[0];
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+
+        if (!allowedExtensions.exec(image.name)) {
+            const alertState: IAlert = {
+                type: "error",
+                text: "Tipe file tidak valid untuk melakukan proses ini",
+                show: true,
+            };
+
+            alertStore.set(alertState);
+
+            return;
+        }
+
+        const fileSize = (image.size / 1024 / 1024).toFixed(2);
+
+        if (parseFloat(fileSize) > 1) {
+            const alertState: IAlert = {
+                type: "error",
+                text: "Ukuran file tidak valid untuk melakukan proses ini",
+                show: true,
+            };
+
+            alertStore.set(alertState);
+
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(image);
+        reader.onload = e => avatar = e.target.result;
+
+        await uploadPhotoUser(image);
     }
 
     function onTriggerFileInput() {
-        console.log("test");
+        uploadFile.click();
     }
 
     onMount(() => {
@@ -110,10 +172,15 @@
         <div class="flex justify-center lg:basis-1/2">
             <div class="relative">
                 <div class="rounded-full border-2 border-gray-500">
-                    <img alt="profile" src="http://192.168.1.10:8080/api/storage/avatars/{$auth.photo}"
-                         class="rounded-full h-28 w-28">
+                    {#if avatar}
+                        <img alt="profile" src="{avatar}"
+                             class="rounded-full h-28 w-28">
+                    {:else }
+                        <img alt="profile" src="{import.meta.env.VITE_API_URL_AVATAR}/{$auth.photo}"
+                             class="rounded-full h-28 w-28">
+                    {/if}
                 </div>
-                <input type="file" class="hidden" bind:this={uploadFile}/>
+                <input type="file" class="hidden" bind:this={uploadFile} on:change={onUploadPhotoUser}/>
                 <button type="button"
                         class="absolute top-20 right-0 p-2 rounded-full bg-gray-300/60 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-600/60"
                         on:click={onTriggerFileInput}
