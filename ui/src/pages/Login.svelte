@@ -43,7 +43,6 @@
         onError: (errors, context) => {
             loading = false;
             if (errors instanceof AxiosError) {
-                errors;
                 if (errors.response.status === 422) {
                     const {
                         param,

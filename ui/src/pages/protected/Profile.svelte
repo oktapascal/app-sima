@@ -4,7 +4,7 @@
     import {AxiosError, type AxiosResponse} from "axios";
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
-    import type {IProfileRequest, IProfileResponse, IAlert, IUploadResponse} from "@/types";
+    import type {IProfileRequest, IProfileResponse, IAlert, IUploadResponse, IErrorMessage} from "@/types";
     import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
     import {Validators} from "@/libs/validator";
     import instance from "@/libs/instance";
@@ -59,7 +59,45 @@
         },
         onSubmit: async (values) => {
             loading = true;
-            console.log(values);
+
+            const data = {
+                ...values,
+                no_telp: String(values.no_telp),
+            };
+
+            return await instance.post("/auth/profile", data);
+        },
+        onError: (errors, context) => {
+            loading = false;
+            if (errors instanceof AxiosError) {
+                if (errors.response.status === 422) {
+                    const {
+                        param,
+                        error_message,
+                    } = errors.response.data.data as IErrorMessage;
+
+                    context.setErrors(param, (value) => error_message);
+                }
+            } else {
+                const alertState: IAlert = {
+                    type: "error",
+                    text: errors.response.statusText,
+                    show: true,
+                };
+
+                alertStore.set(alertState);
+            }
+        },
+        onSuccess: (response: AxiosResponse) => {
+            loading = false;
+
+            const alertState: IAlert = {
+                show: true,
+                type: "success",
+                text: "Data profile berhasil diupdate",
+            };
+
+            alertStore.set(alertState);
         },
     });
 
@@ -210,7 +248,8 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="No. Telepon" name="no_telp" placeholder="No. Telepon" type="number"
+                    <InputDefault label="No. Telepon" name="no_telp" placeholder="No. Telepon" type="tel"
+                                  pattern="[0-9]*"
                                   value={$data.no_telp} readonly={loading}
                                   isError={$errors.no_telp && $touched.no_telp}/>
                     {#if !!$errors.no_telp}
@@ -220,7 +259,7 @@
                     {/if}
                 </div>
                 <div class="my-2.5">
-                    <InputDefault label="Alamat" name="alamat" placeholder="Alamat" type="text" value={$data.address}
+                    <InputDefault label="Alamat" name="address" placeholder="Alamat" type="text" value={$data.address}
                                   readonly={loading} isError={$errors.address && $touched.address}/>
                     {#if !!$errors.address}
                         <ErrorMessage>

@@ -37,11 +37,11 @@ func (repository *EmployeeRepositoryImpl) GetOne(db *gorm.DB, nik string) (domai
 	var employee domain.Employee
 
 	row := db.Table("employee a").Select(`a.id_employee, a.nik, a.id_location, a.name, a.address, 
-	a.email, a.active_flags, a.id_position, a.id_area, a.id_fm, a.id_bm`).
+	a.email, a.active_flags, a.id_position, a.id_area, a.id_fm, a.id_bm, a.no_telp`).
 		Where("a.nik = ?", nik).Row()
 
 	err := row.Scan(&employee.IdEmployee, &employee.Nik, &employee.IdLocation, &employee.Name, &employee.Address, &employee.Email,
-		&employee.ActiveFlags, &employee.IdPosition, &employee.IdArea, &employee.IdFm, &employee.IdBm)
+		&employee.ActiveFlags, &employee.IdPosition, &employee.IdArea, &employee.IdFm, &employee.IdBm, &employee.NoTelp)
 
 	if errors.Is(err, sql.ErrNoRows) {
 		return employee, errors.New("data employee not found")
