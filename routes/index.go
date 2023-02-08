@@ -13,7 +13,8 @@ import (
 
 func NewRouter(app *fiber.App,
 	middlewareAuth middleware.Authentication,
-	authControllers controllers.AuthControllers) {
+	authControllers controllers.AuthControllers,
+	menuControllers controllers.MenuControllers) {
 	authGroup := app.Group("/api/auth")
 	NewAuthRoutes(authGroup, authControllers)
 
@@ -22,6 +23,9 @@ func NewRouter(app *fiber.App,
 	authGroupWithMiddleware.Post("/profile", timeout.New(authControllers.UpdateUserProfile, 10*time.Second))
 	authGroupWithMiddleware.Get("/profile", timeout.New(authControllers.GetUserProfile, 10*time.Second))
 	authGroupWithMiddleware.Post("/upload-photo", timeout.New(authControllers.UploadUserPhoto, 10*time.Second))
+
+	settingGroup := app.Group("/api/setting", middlewareAuth.MiddlewareCookie, middlewareAuth.MiddlewareBearer)
+	NewSettingRoutes(settingGroup, menuControllers)
 
 	app.Get("/api/storage/avatars/:file", func(ctx *fiber.Ctx) error {
 		directory := ctx.Params("file")

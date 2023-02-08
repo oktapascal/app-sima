@@ -31,9 +31,6 @@ func main() {
 
 	mysql := database.NewMysql(config)
 
-	//ctx := context.Background()
-	//fireStore := database.NewFirestoreClient(config, ctx)
-
 	validate := validator.New()
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
@@ -68,12 +65,15 @@ func main() {
 	userRepository := repository.NewUserRepositoryImpl()
 	employeeRepository := repository.NewEmployeeRepositoryImpl()
 	sessionRepository := repository.NewSessionRepositoryImpl()
+	menuRepository := repository.NewMenuRepositoryImpl()
 
 	authServices := services.NewAuthServicesImpl(userRepository, employeeRepository, sessionRepository, mysql)
+	menuServices := services.NewMenuServicesImpl(menuRepository, mysql)
 
 	authControllers := controllers.NewAuthControllerImpl(validate, authServices, jwtConfig, cookiesConfig)
+	menuControllers := controllers.NewMenuControllersImpl(validate, menuServices)
 
-	routes.NewRouter(app, middlewareAuth, authControllers)
+	routes.NewRouter(app, middlewareAuth, authControllers, menuControllers)
 
 	// load static files
 	app.Static("/", "./ui/dist")
