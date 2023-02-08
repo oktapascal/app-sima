@@ -13,6 +13,10 @@ import IconCog from "./IconCog.svelte";
 import IconLogout from "./IconLogout.svelte";
 import IconWindowClose from "./IconWindowClose.svelte";
 import IconCamera from "./IconCamera.svelte";
+import IconCogs from "./IconCogs.svelte";
+import IconHome from "./IconHome.svelte";
+import IconTools from "./IconTools.svelte";
+import IconDatabase from "./IconDatabase.svelte";
 
 export {
     IconMoon,
@@ -30,4 +34,8 @@ export {
     IconLogout,
     IconWindowClose,
     IconCamera,
+    IconTools,
+    IconHome,
+    IconCogs,
+    IconDatabase,
 };
