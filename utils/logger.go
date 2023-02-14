@@ -12,7 +12,7 @@ func WriteLogging() *logrus.Logger {
 	log.SetLevel(logrus.ErrorLevel)
 
 	now := time.Now().UTC()
-	fileName := "application-" + now.Format("YYYYMMDD") + ".log"
+	fileName := "storage/app/logs/application-" + now.Format("YYYYMMDD") + ".log"
 	file, _ := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 
 	log.SetOutput(file)
