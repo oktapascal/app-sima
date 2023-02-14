@@ -22,5 +22,5 @@ export {AlertDefault} from "./alerts";
 export {Loading, LoadingPage} from "./loadings";
 export {NavbarBase, NavbarUser, NavbarGuest} from "./navbars";
 export {ErrorMessage, Notification, Config, SignOut} from "./others";
-export {WebNavbar} from "./webs";
+export {WebNavbar, WebSidebar} from "./webs";
 export {MobileNavbar, MobileProfile, MobileProfileBox} from "./mobiles";

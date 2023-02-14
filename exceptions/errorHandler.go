@@ -207,6 +207,10 @@ func notFoundError(ctx *fiber.Ctx, err interface{}) bool {
 // internalServerError returns a generic internal server error response to the
 // client.
 func internalServerError(ctx *fiber.Ctx, err interface{}) error {
+
+	log := utils.WriteLogging()
+	log.Error(err)
+
 	response := web.JsonResponses{
 		StatusCode:    fiber.StatusInternalServerError,
 		StatusMessage: "Internal Server Error",

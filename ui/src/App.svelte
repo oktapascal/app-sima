@@ -7,7 +7,7 @@
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import {breakpoint} from "@/stores/breakpointStore";
-    import {NavbarBase, NavbarUser, AlertDefault, NavbarGuest} from "@/components";
+    import {NavbarBase, NavbarUser, AlertDefault, NavbarGuest, WebSidebar} from "@/components";
     import LazyRoute from "@/pages/LazyRoute.svelte";
     import PublicRoute from "@/pages/PublicRoute.svelte";
     import PrivateRoute from "@/pages/PrivateRoute.svelte";
@@ -58,6 +58,9 @@
             <NavbarGuest/>
         {/if}
     </NavbarBase>
+    {#if $auth.isAuthenticated}
+        <WebSidebar/>
+    {/if}
     <main class="lg:px-2.5 lg:pb-2.5">
 
         <Route path="/" primary={false} let:location>

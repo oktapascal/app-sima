@@ -86,7 +86,7 @@
                 <div class="flex-1 mt-2">
                     <button type="button"
                             class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500">
-                        <img alt="avatar" src="http://192.168.1.10:8080/api/storage/avatars/{$auth.photo}"
+                        <img alt="avatar" src="{import.meta.env.VITE_API_URL_AVATAR}/{$auth.photo}"
                              class="w-12 h-12 rounded-full"/>
                         <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">{$auth.nik}</span>
                     </button>
