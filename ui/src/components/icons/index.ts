@@ -19,6 +19,7 @@ import IconTools from "./IconTools.svelte";
 import IconDatabase from "./IconDatabase.svelte";
 import IconChevronDown from "./IconChevronDown.svelte";
 import IconChevronUp from "./IconChevronUp.svelte";
+import IconAccount from "./IconAccount.svelte";
 
 export {
     IconMoon,
@@ -42,4 +43,5 @@ export {
     IconDatabase,
     IconChevronUp,
     IconChevronDown,
+    IconAccount,
 };

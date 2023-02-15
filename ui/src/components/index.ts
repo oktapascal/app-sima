@@ -20,6 +20,7 @@ export {
     IconCogs,
     IconHome,
     IconTools,
+    IconAccount,
 } from "./icons";
 export {BoxDefault} from "./box";
 export {InputDefault, InputGroup} from "./inputs";
