@@ -17,6 +17,8 @@ import IconCogs from "./IconCogs.svelte";
 import IconHome from "./IconHome.svelte";
 import IconTools from "./IconTools.svelte";
 import IconDatabase from "./IconDatabase.svelte";
+import IconChevronDown from "./IconChevronDown.svelte";
+import IconChevronUp from "./IconChevronUp.svelte";
 
 export {
     IconMoon,
@@ -38,4 +40,6 @@ export {
     IconHome,
     IconCogs,
     IconDatabase,
+    IconChevronUp,
+    IconChevronDown,
 };

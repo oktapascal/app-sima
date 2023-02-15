@@ -14,6 +14,12 @@ export {
     IconLogout,
     IconWindowClose,
     IconCamera,
+    IconChevronDown,
+    IconChevronUp,
+    IconDatabase,
+    IconCogs,
+    IconHome,
+    IconTools,
 } from "./icons";
 export {BoxDefault} from "./box";
 export {InputDefault, InputGroup} from "./inputs";
