@@ -1,8 +1,22 @@
 <script lang="ts">
     import {auth} from "@/stores/authStore";
+
+    let openMenu: boolean = false;
+
+    function onOpenMenu() {
+        openMenu = true;
+    }
+
+    function onCloseMenu() {
+        openMenu = false;
+    }
 </script>
 
-<div class="fixed left-0 top-0 z-50 h-full transition w-20 bg-gray-50 shadow-xl border-r-3xl flex flex-col">
+<div class="fixed left-0 top-0 z-50 h-full transition w-20 bg-gray-50 shadow-xl border-r-3xl flex flex-col transition-width ease hover:w-81"
+     on:mouseover={onOpenMenu}
+     on:mouseleave={onCloseMenu}
+     on:focus={onOpenMenu}
+     on:blur={onCloseMenu}>
     <div class="flex justify-start items-center p-1.5">
         <img alt="logo" src="/images/sima.png" class="h-10"/>
     </div>

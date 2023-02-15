@@ -14,7 +14,14 @@ module.exports = {
             3: "3rem",
             15: "15rem",
         },
-        extend: {},
+        extend: {
+            width: {
+                81: "21rem",
+            },
+            transitionProperty: {
+                "width": "width",
+            },
+        },
     },
     plugins: [
         require("flowbite/plugin"),
