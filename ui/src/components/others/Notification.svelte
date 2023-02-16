@@ -1,6 +1,5 @@
 <script lang="ts">
     import tooltip from "@/libs/tooltip";
-    import {IconBell} from "@/components";
 
     export let total: number = 0;
 
@@ -12,7 +11,7 @@
     <button use:tooltip data-tooltip-template="tooltip-notification" type="button"
             class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 dark:hover:bg-gray-600"
     >
-        <IconBell className="h-7 w-7 fill-current text-gray-500 dark:text-white"/>
+        <i class="icofont-alarm text-2xl leading-none text-gray-500 dark:text-white"></i>
     </button>
     {#if total > 0}
         <span class="badge {rightPosition}">{totalConvert}</span>

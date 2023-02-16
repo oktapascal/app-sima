@@ -6,7 +6,7 @@
     import {auth} from "@/stores/authStore";
     import type {IAlert, IAuth, ILoginRequest, ILoginResponse, IErrorMessage} from "@/types";
     import {Validators} from "@/libs/validator";
-    import {BoxDefault, ButtonDefault, IconEye, IconEyeOff, InputDefault, InputGroup, ErrorMessage} from "@/components";
+    import {BoxDefault, ButtonDefault, InputDefault, InputGroup, ErrorMessage} from "@/components";
     import instance from "@/libs/instance";
 
     export let registerFocus;
@@ -110,11 +110,9 @@
                         <svelte:fragment slot="append">
                             <button type="button" on:click={togglePassword}>
                                 {#if isSecret}
-                                    <IconEye
-                                            className="icon h-7 w-7 text-gray-500 dark:text-gray-100 {$errors.password && $touched.password ? 'error': ''}"/>
+                                    <i class="icofont-eye text-2xl text-gray-500 dark:text-gray-100 {$errors.password && $touched.password ? 'error': ''}"></i>
                                 {:else }
-                                    <IconEyeOff
-                                            className="icon h-7 w-7 text-gray-500 dark:text-gray-100 {$errors.password && $touched.password ? 'error': ''}"/>
+                                    <i class="icofont-eye-blocked text-2xl text-gray-500 dark:text-gray-100 {$errors.password && $touched.password ? 'error': ''}"></i>
                                 {/if}
                             </button>
                         </svelte:fragment>

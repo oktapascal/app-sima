@@ -1,6 +1,5 @@
 <script lang="ts">
     import tooltip from "@/libs/tooltip";
-    import {IconMoon, IconSun} from "@/components";
     import {theme} from "@/stores/themeStore";
 
     $: isDarkMode = $theme === "dark";
@@ -25,9 +24,9 @@
             class="border border-gray-300 rounded-lg p-2.5 mr-2 lg:mr-0 focus:outline-none focus:ring-2 focus:ring-gray-400"
             on:click={() => toggleTheme($theme)}>
         {#if isDarkMode}
-            <IconSun className="w-7 h-7 text-gray-500 dark:text-white"/>
+            <i class="icofont-sun-alt icofont-2x text-gray-500 dark:text-white"></i>
         {:else}
-            <IconMoon className="w-7 h-7 text-gray-500 dark:text-white"/>
+            <i class="icofont-moon icofont-2x text-gray-500 dark:text-white"></i>
         {/if}
     </button>
     <div id="tooltip-theme" role="tooltip" class="hidden">

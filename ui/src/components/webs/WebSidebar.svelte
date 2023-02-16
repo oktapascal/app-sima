@@ -6,7 +6,6 @@
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
-    import {IconChevronDown, IconChevronUp, IconLogout, IconCog} from "@/components";
 
     let openBottomMenu: boolean = false;
 
@@ -64,11 +63,9 @@
                  class="border-2 border-solid border-transparent rounded-full h-11 w-11"/>
             <span class="transition-all whitespace-nowrap flex flex-col font-semibold ml-1.5 invisible text-gray-500 group-hover:visible dark:text-white">{$auth.nik}</span>
             {#if openBottomMenu}
-                <IconChevronUp
-                        className="h-6 w-6 ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"/>
-            {:else }
-                <IconChevronDown
-                        className="h-6 w-6 ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"/>
+                <i class="icofont-rounded-up text-lg ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"></i>
+            {:else}
+                <i class="icofont-rounded-down text-lg ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"></i>
             {/if}
         </button>
         {#if openBottomMenu}
@@ -78,14 +75,14 @@
                     <button type="button"
                             class="flex flex-row items-center py-0.5 pr-4 rounded-lg border-8 border-transparent"
                             on:click={onSignOut}>
-                        <IconLogout className="h-5 w-5 mr-3 text-gray-500 dark:text-white"/>
+                        <i class="icofont-logout text-lg mr-3 text-gray-500 dark:text-white"></i>
                         <span class="whitespace-nowrap text-gray-500 invisible dark:text-white group-hover:visible">Sign Out</span>
                     </button>
                 </li>
                 <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200">
                     <button type="button"
                             class="flex flex-row items-center py-0.5 pr-4 rounded-lg border-8 border-transparent">
-                        <IconCog className="h-5 w-5 mr-3 text-gray-500 dark:text-white"/>
+                        <i class="icofont-ui-settings text-lg mr-3 text-gray-500 dark:text-white"></i>
                         <span class="whitespace-nowrap text-gray-500 invisible dark:text-white group-hover:visible">Settings</span>
                     </button>
                 </li>

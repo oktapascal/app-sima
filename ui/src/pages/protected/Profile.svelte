@@ -5,7 +5,7 @@
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import type {IProfileRequest, IProfileResponse, IAlert, IUploadResponse, IErrorMessage} from "@/types";
-    import {IconCamera, InputDefault, ButtonDefault, ErrorMessage} from "@/components";
+    import {InputDefault, ButtonDefault, ErrorMessage} from "@/components";
     import {Validators} from "@/libs/validator";
     import instance from "@/libs/instance";
 
@@ -223,7 +223,7 @@
                         class="absolute top-20 right-0 p-2 rounded-full bg-gray-300/60 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-gray-600/60"
                         on:click={onTriggerFileInput}
                 >
-                    <IconCamera className="h-5 w-5 text-gray-500 dark:text-white"/>
+                    <i class="icofont-camera text-2xl leading-none text-gray-500 dark:text-white"></i>
                 </button>
             </div>
         </div>

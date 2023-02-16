@@ -7,7 +7,6 @@
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
     import type {IAlert, IAuth} from "@/types";
-    import {IconWindowClose, IconMoon, IconSun, IconLogout} from "@/components";
     import {AxiosError} from "axios";
 
     const dispatch = createEventDispatcher();
@@ -74,7 +73,7 @@
         <div class="flex-none">
             <button class="float-right font-medium rounded-full p-2 inline-flex items-center focus:outline-none"
                     on:click={onHideProfileBox}>
-                <IconWindowClose className="h-7 w-7 text-gray-500 dark:text-white"/>
+                <i class="icofont-close text-2xl text-gray-500 dark:text-white"></i>
             </button>
         </div>
         <hr class="border-t border-gray-500"/>
@@ -104,9 +103,9 @@
                             class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500"
                             on:click={() => toggleTheme($theme)}>
                         {#if $theme === "dark"}
-                            <IconMoon className="h-7 w-7 text-gray-500 dark:text-white"/>
+                            <i class="icofont-moon text-2xl text-gray-500 dark:text-white"></i>
                         {:else }
-                            <IconSun className="h-7 w-7 text-gray-500 dark:text-white"/>
+                            <i class="icofont-sun-alt text-2xl text-gray-500 dark:text-white"></i>
                         {/if}
                         <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">{textTheme}</span>
                     </button>
@@ -115,7 +114,7 @@
                     <button type="button"
                             class="rounded-lg px-2 py-2.5 inline-flex items-center w-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-300 dark:hover:bg-gray-600 dark:focus:ring-gray-500"
                             on:click={onSignOut}>
-                        <IconLogout className="h-7 w-7 text-gray-500 dark:text-white"/>
+                        <i class="icofont-logout text-2xl text-gray-500 dark:text-white"></i>
                         <span class="text-gray-500 font-medium text-md text-center pl-4 dark:text-white">Sign Out</span>
                     </button>
                 </div>

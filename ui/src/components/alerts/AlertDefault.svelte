@@ -1,15 +1,14 @@
 <script lang="ts">
     import {onMount} from "svelte";
     import {fade} from "svelte/transition";
-    import {IconAlert, IconAlertBox, IconAlertCircle, IconCheckCircle} from "@/components";
     import {alertStore} from "@/stores/alertStore";
     import {breakpoint} from "@/stores/breakpointStore";
 
     const icon = {
-        success: IconCheckCircle,
-        error: IconAlert,
-        warning: IconAlertCircle,
-        info: IconAlertBox,
+        success: "icofont-check-circled",
+        error: "icofont-error",
+        warning: "icofont-warning-alt",
+        info: "icofont-info-circle",
     };
 
     const text = {
@@ -44,7 +43,7 @@
      role="alert"
      class="alert p-4 mb-4 text-white border rounded-lg fixed w-auto {$alertStore.type} {$breakpoint ? 'top-center':'bottom-right'}">
     <div class="flex items-center">
-        <svelte:component this={icon[$alertStore.type]} className="icon mr-2 w-6 h-6 text-white"/>
+        <i class="{icon[$alertStore.type]} text-2xl text-white mr-2"></i>
         <h3 class="text-lg font-medium text-white">{text[$alertStore.type]}</h3>
     </div>
     <div class="mt-2 mb-4 text-sm text-white">
