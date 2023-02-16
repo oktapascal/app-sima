@@ -9,7 +9,7 @@
 
 <div class="mx-1 relative">
     <button use:tooltip data-tooltip-template="tooltip-notification" type="button"
-            class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-100 focus:ring-2 focus:outline-none focus:ring-gray-200 dark:hover:bg-gray-600"
+            class="p-2.5 text-center inline-flex items-center rounded-full hover:bg-gray-200 focus:ring-2 focus:outline-none focus:ring-gray-200 dark:hover:bg-gray-600"
     >
         <i class="icofont-alarm text-2xl leading-none text-gray-500 dark:text-white"></i>
     </button>

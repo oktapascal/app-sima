@@ -5,5 +5,5 @@ export {AlertDefault} from "./alerts";
 export {Loading, LoadingPage} from "./loadings";
 export {NavbarBase, NavbarUser, NavbarGuest} from "./navbars";
 export {ErrorMessage, Notification} from "./others";
-export {WebNavbar, WebSidebar} from "./webs";
+export {WebNavbar, WebSidebar, WebSettingbar} from "./webs";
 export {MobileNavbar, MobileProfile, MobileProfileBox} from "./mobiles";

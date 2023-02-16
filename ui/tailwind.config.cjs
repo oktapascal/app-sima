@@ -21,6 +21,9 @@ module.exports = {
             transitionProperty: {
                 "width": "width",
             },
+            spacing: {
+                23: "5.5rem",
+            },
         },
     },
     plugins: [

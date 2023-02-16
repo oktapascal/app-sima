@@ -3,9 +3,12 @@
     import {AxiosError} from "axios";
     import {useNavigate, Link} from "svelte-navigator";
     import type {IAlert, IAuth} from "@/types";
+    import {rightSideStore} from "@/stores/rightSideStore";
     import {alertStore} from "@/stores/alertStore";
     import {auth} from "@/stores/authStore";
     import instance from "@/libs/instance";
+
+    const navigate = useNavigate();
 
     let openBottomMenu: boolean = false;
 
@@ -13,7 +16,9 @@
         openBottomMenu = !openBottomMenu;
     }
 
-    const navigate = useNavigate();
+    function onShowRightSidebar() {
+        rightSideStore.set(true);
+    }
 
     async function onSignOut() {
         try {
@@ -50,7 +55,7 @@
     }
 </script>
 
-<div class="group fixed left-0 top-0 z-50 h-full transition w-20 bg-gray-50 shadow-xl border-r-3xl flex flex-col transition-width ease hover:w-81">
+<div class="group fixed left-0 top-0 z-50 h-full transition w-20 bg-gray-50 shadow-xl border-r-3xl flex flex-col transition-width ease bg-gray-50 dark:bg-gray-700 hover:w-81">
     <div class="flex justify-start items-center p-1.5">
         <img alt="logo" src="/images/sima.png" class="h-10"/>
     </div>
@@ -71,22 +76,23 @@
         {#if openBottomMenu}
             <ul class="m-0 outline-0 overflow-hidden list-none py-0 px-6" in:fly={{ y: 500, duration: 120 }}
                 out:fly={{ y: 90, duration: 150, delay: 50 }}>
-                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200">
+                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200 dark:hover:bg-gray-600">
                     <button type="button"
-                            class="flex flex-row items-center py-0.5 pr-4 rounded-lg border-8 border-transparent"
+                            class="flex flex-row items-center w-full py-0.5 pr-4 rounded-lg border-8 border-transparent"
                             on:click={onSignOut}>
                         <i class="icofont-logout text-lg mr-3 text-gray-500 dark:text-white"></i>
                         <span class="whitespace-nowrap text-gray-500 invisible dark:text-white group-hover:visible">Sign Out</span>
                     </button>
                 </li>
-                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200">
+                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200 dark:hover:bg-gray-600">
                     <button type="button"
-                            class="flex flex-row items-center py-0.5 pr-4 rounded-lg border-8 border-transparent">
+                            class="flex flex-row items-center w-full py-0.5 pr-4 rounded-lg border-8 border-transparent"
+                            on:click={onShowRightSidebar}>
                         <i class="icofont-ui-settings text-lg mr-3 text-gray-500 dark:text-white"></i>
                         <span class="whitespace-nowrap text-gray-500 invisible dark:text-white group-hover:visible">Settings</span>
                     </button>
                 </li>
-                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200">
+                <li class="rounded-lg transition-all cursor-pointer mt-1 select-none hover:bg-gray-200 dark:hover:bg-gray-600">
                     <Link to="/profile"
                           class="flex h-full w-full flex-row items-center py-0.5 pr-4 rounded-lg border-8 border-transparent">
                         <i class="icofont-user text-lg mr-3 text-gray-500 dark:text-white"></i>
