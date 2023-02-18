@@ -1,5 +1,6 @@
 <script lang="ts">
     import "./assets/css/app.css";
+    import {QueryClient, QueryClientProvider} from "@tanstack/svelte-query";
     import {onMount} from "svelte";
     import {Router, Route} from "svelte-navigator";
     import Portal from "svelte-portal";
@@ -13,6 +14,9 @@
     import PrivateRoute from "@/pages/PrivateRoute.svelte";
     import LoadingPage from "@/components/loadings/LoadingPage.svelte";
     import Redirect from "@/pages/Redirect.svelte";
+    import NotFound from "@/pages/NotFound.svelte";
+
+    const queryClient = new QueryClient();
 
     const delayModuleLoad = module =>
         new Promise(res =>
@@ -51,39 +55,45 @@
 </script>
 
 <Router>
-    <NavbarBase>
+    <QueryClientProvider client={queryClient}>
+        <NavbarBase>
+            {#if $auth.isAuthenticated}
+                <NavbarUser/>
+            {:else }
+                <NavbarGuest/>
+            {/if}
+        </NavbarBase>
         {#if $auth.isAuthenticated}
-            <NavbarUser/>
-        {:else }
-            <NavbarGuest/>
+            <WebSidebar/>
+            <WebSettingbar/>
         {/if}
-    </NavbarBase>
-    {#if $auth.isAuthenticated}
-        <WebSidebar/>
-        <WebSettingbar/>
-    {/if}
-    <main class="lg:pl-23 lg:pr-2.5 lg:pb-2.5">
-        <Route path="/" primary={false} let:location>
-            <Redirect/>
-        </Route>
+        <main class="lg:pl-23 lg:pr-2.5 lg:pb-2.5">
+            <Route path="/" primary={false} let:location>
+                <Redirect/>
+            </Route>
 
-        <PublicRoute path="login" let:location>
-            <LazyRoute component={Login} delayMs={500}>
-                <LoadingPage/>
-            </LazyRoute>
-        </PublicRoute>
+            <PublicRoute path="login" let:location>
+                <LazyRoute component={Login} delayMs={500}>
+                    <LoadingPage/>
+                </LazyRoute>
+            </PublicRoute>
 
-        <PrivateRoute path="dashboard" let:location>
-            <LazyRoute component={Dashboard} delayMs={500}>
-                <LoadingPage/>
-            </LazyRoute>
-        </PrivateRoute>
-        <PrivateRoute path="profile" let:location>
-            <LazyRoute component={Profile} delayMs={500}>
-                <LoadingPage/>
-            </LazyRoute>
-        </PrivateRoute>
-    </main>
+            <PrivateRoute path="dashboard" let:location>
+                <LazyRoute component={Dashboard} delayMs={500}>
+                    <LoadingPage/>
+                </LazyRoute>
+            </PrivateRoute>
+            <PrivateRoute path="profile" let:location>
+                <LazyRoute component={Profile} delayMs={500}>
+                    <LoadingPage/>
+                </LazyRoute>
+            </PrivateRoute>
+
+            <Route>
+                <NotFound/>
+            </Route>
+        </main>
+    </QueryClientProvider>
 </Router>
 
 <Portal target="body">

@@ -59,7 +59,16 @@
     <div class="flex justify-start items-center p-1.5">
         <img alt="logo" src="/images/sima.png" class="h-10"/>
     </div>
-    <div class="pb-8 h-full scroll-auto"></div>
+    <div class="pb-8 h-full scroll-auto">
+        <ul role="menu" class="outline-0 list-none m-0 overflow-hidden py-0 pl-1.3 pr-1.6">
+            <li class="rounded-lg mt-4 p-1.5">
+                <a href="/" class="no-underline cursor-pointer select-none flex items-center m-0 rounded-lg p-2 pl-0">
+                    <i class="icofont-dashboard-web text-2xl w-auto text-center text-gray-500 dark:text-white"></i>
+                    <span class="my-0 mx-2 ml-4 whitespace-nowrap transition-all text-gray-500 dark:text-white invisible group-hover:visible">Dashboard</span>
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="flex flex-col justify-center pb-6">
         <button type="button"
                 class="flex flex-row items-center cursor-pointer pt-8 pb-4 px-5 text-gray-500 dark:text-white"

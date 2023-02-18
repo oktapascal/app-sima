@@ -105,3 +105,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.text-shadow {
+    text-shadow: 0 0 50px rgb(15 139 253 / 20%);
+}
