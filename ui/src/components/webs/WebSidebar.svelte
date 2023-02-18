@@ -76,11 +76,8 @@
             <img alt="avatar" src="{import.meta.env.VITE_API_URL_AVATAR}/{$auth.photo}"
                  class="border-2 border-solid border-transparent rounded-full h-11 w-11"/>
             <span class="transition-all whitespace-nowrap flex flex-col font-semibold ml-1.5 invisible text-gray-500 group-hover:visible dark:text-white">{$auth.nik}</span>
-            {#if openBottomMenu}
-                <i class="icofont-rounded-up text-lg ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"></i>
-            {:else}
-                <i class="icofont-rounded-down text-lg ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"></i>
-            {/if}
+            <i class="transition duration-150 icofont-rounded-down text-lg ml-auto text-gray-500 whitespace-nowrap invisible group-hover:visible dark:text-white"
+               class:rotate-180={openBottomMenu}></i>
         </button>
         {#if openBottomMenu}
             <ul class="m-0 outline-0 overflow-hidden list-none py-0 px-6" in:fly={{ y: 500, duration: 120 }}
